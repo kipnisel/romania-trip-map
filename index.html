@@ -41,7 +41,7 @@
   .pop .fam{display:block;margin-top:6px;font-size:.76rem;font-weight:700;color:var(--fag)}
   .pop .fam.none{color:var(--muted);font-weight:600}
   .pop p{margin:7px 0;font-size:.84rem;line-height:1.5;color:#33443b}
-  .pop .acts{display:flex;gap:8px;margin-top:8px}
+  .pop .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
   .pop a,.pop button{font-family:var(--sans);font-size:.78rem;font-weight:700;text-decoration:none;
     border-radius:8px;padding:6px 10px;cursor:pointer;border:1px solid var(--line)}
   .pop a{color:var(--bra);background:#eef3f6;border-color:#d6e4ec}
@@ -91,6 +91,7 @@
     <div style="flex:1">
       <h1>🗺️ מפת טיול רומניה <span class="sub">· אוגוסט 2026</span></h1>
     </div>
+    <a href="attractions.html" style="text-decoration:none;font-size:.8rem;font-weight:700;border:1px solid var(--line);background:var(--ground);color:var(--ink);border-radius:9px;padding:7px 11px;white-space:nowrap">🧭 מדריך</a>
     <button id="suggestBtn">💡 הצעות</button>
     <button id="allReviews">📝 ביקורות</button>
   </header>
@@ -128,30 +129,30 @@ function colorFor(p){
 }
 
 const POIS = [
- {id:"lodging1",name:"🏠 Airport Therme Residence",lat:44.6120,lng:26.0730,cat:"לינה",area:"בוקרשט",rt:"",link:"https://www.google.com/maps/search/?api=1&query=Airport+Therme+Residence+Balotesti",desc:"לינה 16–17.8 + 25–27.8 · ליד שדה OTP · Soseaua Unirii 160a"},
- {id:"lodging2",name:"🏠 Horace Guesthouse — דז'אני",lat:45.7180,lng:24.8250,cat:"לינה",area:"פגאראש",rt:"",link:"https://www.google.com/maps/search/?api=1&query=Horace+Guesthouse+Dejani",desc:"לינה 17–21.8 · בריכה, ג'קוזי, נהר"},
- {id:"lodging3",name:"🏠 דירת Sonia — בראשוב",lat:45.6430,lng:25.5850,cat:"לינה",area:"בראשוב",rt:"",link:"https://www.google.com/maps/search/?api=1&query=Strada+Stefan+Octavian+Iosif+31+Brasov",desc:"לינה 21–25.8 · מרכז העיר (יש מדרגות)"},
- {id:"otp",name:"✈️ שדה תעופה OTP + Sixt",lat:44.5680,lng:26.0850,cat:"תחבורה",area:"בוקרשט",rt:"",link:"https://www.sixt.ro",desc:"איסוף ואן 16.8 20:30 · החזרה 27.8 04:00"},
+ {id:"lodging1",name:"🏠 Airport Therme Residence",lat:44.621600,lng:26.102190,cat:"לינה",area:"בוקרשט",rt:"",link:"https://www.google.com/maps/search/?api=1&query=Airport+Therme+Residence+Balotesti",desc:"לינה 16–17.8 + 25–27.8 · ליד שדה OTP · Soseaua Unirii 160a"},
+ {id:"lodging2",name:"🏠 Horace Guesthouse — דז'אני",lat:45.710710,lng:24.931860,cat:"לינה",area:"פגאראש",rt:"",link:"https://www.google.com/maps/search/?api=1&query=Horace+Guesthouse+Dejani",desc:"לינה 17–21.8 · בריכה, ג'קוזי, נהר"},
+ {id:"lodging3",name:"🏠 דירת Sonia — בראשוב",lat:45.648757,lng:25.584278,cat:"לינה",area:"בראשוב",rt:"",link:"https://www.google.com/maps/search/?api=1&query=Strada+Stefan+Octavian+Iosif+31+Brasov",desc:"לינה 21–25.8 · מרכז העיר (יש מדרגות)"},
+ {id:"otp",name:"✈️ שדה תעופה OTP + Sixt",lat:44.571110,lng:26.085000,cat:"תחבורה",area:"בוקרשט",rt:"",link:"https://www.sixt.ro",desc:"איסוף ואן 16.8 20:30 · החזרה 27.8 04:00"},
  {id:"balea",name:"⛰️ טרנספגאראשן + אגם באלאה",lat:45.6028,lng:24.6172,cat:"טבע",area:"פגאראש",rt:"4.6",link:"https://maps.google.com/?q=Balea+Lac",desc:"כביש הררי ~90 ק\"מ + אגם קרחוני 2042מ. חצי יום עד יום. בוקר אמצע-שבוע פחות עמוס"},
  {id:"telecabina",name:"🚡 רכבל באלאה",lat:45.6365,lng:24.6069,cat:"טבע",area:"פגאראש",rt:"4.5",link:"https://muntii-fagaras.ro/en/cablecar",desc:"עלייה לאגם ממפל באלאה. הדרך הנוחה לראות את הכביש"},
- {id:"dragus",name:"🎢 פארק הרפתקאות Drăguș",lat:45.7150,lng:24.8050,cat:"אקסטרים",area:"פגאראש",rt:"4.3",link:"https://www.aventura-dragus.ro/en/",desc:"פארק חבלים מדורג לכל הגילאים, מסלול טרולים לילדים מגיל ~4"},
- {id:"sambata",name:"⛪ מנזר סמבטה",lat:45.7011,lng:24.8010,cat:"תרבות",area:"פגאראש",rt:"4.6",link:"https://www.manastireabrancoveanu.ro/",desc:"מנזר יפהפה עם גנים למרגלות ההרים. ~1 ק\"מ מדרגוש"},
+ {id:"dragus",name:"🎢 פארק הרפתקאות Drăguș",lat:45.694391,lng:24.778457,cat:"אקסטרים",area:"פגאראש",rt:"4.3",link:"https://www.aventura-dragus.ro/en/",desc:"פארק חבלים מדורג לכל הגילאים, מסלול טרולים לילדים מגיל ~4"},
+ {id:"sambata",name:"⛪ מנזר סמבטה",lat:45.690100,lng:24.794700,cat:"תרבות",area:"פגאראש",rt:"4.6",link:"https://www.manastireabrancoveanu.ro/",desc:"מנזר יפהפה עם גנים למרגלות ההרים. ~1 ק\"מ מדרגוש"},
  {id:"fagaras",name:"🏰 מבצר פגאראש",lat:45.8453,lng:24.9738,cat:"טירה",area:"פגאראש",rt:"4.7",link:"https://www.cetateafagarasului.com/",desc:"מצודה מהמאה 14 מוקפת חפיר מים + מוזיאון. ~שעה-שעה וחצי"},
  {id:"astra",name:"🏘️ מוזיאון ASTRA",lat:45.7552,lng:24.1161,cat:"משפחתי",area:"פגאראש",rt:"4.8",link:"https://www.muzeulastra.com/",desc:"מוזיאון פתוח ענק (~400 מבנים), חיות, מגרשי משחק. 3+ שעות. אוטובוס 13 מהעיר"},
- {id:"zoosibiu",name:"🦁 גן חיות סיביו",lat:45.7530,lng:24.1300,cat:"חיות",area:"פגאראש",rt:"4.3",link:"https://www.zoosibiu.ro/",desc:"גן החיות הוותיק ברומניה ביער ליד אגם. אפשר סירה"},
+ {id:"zoosibiu",name:"🦁 גן חיות סיביו",lat:45.762466,lng:24.123596,cat:"חיות",area:"פגאראש",rt:"4.3",link:"https://www.zoosibiu.ro/",desc:"גן החיות הוותיק ברומניה ביער ליד אגם. אפשר סירה"},
  {id:"sibiu",name:"🏛️ סיביו העיר העתיקה",lat:45.7975,lng:24.1519,cat:"תרבות",area:"פגאראש",rt:"4.6",link:"https://maps.google.com/?q=Piata+Mare+Sibiu",desc:"הכיכר הגדולה (אונסק\"ו), גשר השקרים, גגות דמויי עיניים"},
- {id:"ocna",name:"🧂 אגמי מלח Ocna Sibiului",lat:45.8770,lng:24.0560,cat:"מים",area:"פגאראש",rt:"4.2",link:"http://www.sibiu-turism.ro/",desc:"אגמי מלח ובוץ, צפים כמו בים המלח. להגיע מוקדם לכיסאות"},
+ {id:"ocna",name:"🧂 אגמי מלח Ocna Sibiului",lat:45.876953,lng:24.063323,cat:"מים",area:"פגאראש",rt:"4.2",link:"http://www.sibiu-turism.ro/",desc:"אגמי מלח ובוץ, צפים כמו בים המלח. להגיע מוקדם לכיסאות"},
  {id:"peles",name:"🏰 טירת פלש (סינאיה)",lat:45.3600,lng:25.5425,cat:"טירה",area:"בראשוב",rt:"4.6",link:"https://peles-castle.ro/peles-castle/",desc:"ארמון מפואר, ~160 חדרים. סיור מודרך בלבד. נפתח 11:00. סגור ב+ג"},
  {id:"bran",name:"🧛 טירת בראן (דרקולה)",lat:45.5149,lng:25.3676,cat:"טירה",area:"בראשוב",rt:"4.3",link:"https://www.bran-castle.com/en/",desc:"הטירה המפורסמת + מנהרת זמן. ~2–3 שעות. צפוף בעונה"},
  {id:"rasnov",name:"🏰 מבצר רשנוב",lat:45.5906,lng:25.4693,cat:"טירה",area:"בראשוב",rt:"4.0",link:"https://maps.google.com/?q=Cetatea+Rasnov",desc:"מבצר איכרים מהמאה 13 על גבעה, נוף מרהיב. עגלת טרקטור למעלה"},
  {id:"dino",name:"🦕 Dino Parc Râșnov",lat:45.5915,lng:25.4741,cat:"משפחתי",area:"בראשוב",rt:"🏆",link:"https://dinoparc.ro/en/",desc:"120+ דינוזאורים בגודל טבעי, מגרשי משחק, קולנוע. צמוד לרשנוב"},
- {id:"aventura",name:"🎢 Parc Aventura Brașov",lat:45.6197,lng:25.6300,cat:"אקסטרים",area:"בראשוב",rt:"4.7",link:"https://www.parc-aventura.ro/",desc:"פארק החבלים הגדול ברומניה, 8 מסלולים מדורגים, זיפליין מעל אגם. מגיל 4"},
- {id:"postavaru",name:"🚡 גונדולה Postăvarul (Poiana)",lat:45.5930,lng:25.5560,cat:"טבע",area:"בראשוב",rt:"",link:"https://www.discoverpoiana.ro/ro/instalatii",desc:"גונדולה מהירה לפסגה ~1727מ, נוף. אפשר לרדת ברגל"},
- {id:"libearty",name:"🐻 שמורת דובים Libearty",lat:45.5780,lng:25.3300,cat:"חיות",area:"בראשוב",rt:"4.7",link:"https://millionsoffriends.org/en/libearty/",desc:"מקלט דובים. סיור מודרך (9/10/11), סגור שני! הזמנה מראש. להגיע 10:00"},
- {id:"zarnesti",name:"🥾 ערוץ זרנשט",lat:45.5670,lng:25.3050,cat:"טבע",area:"בראשוב",rt:"4.7",link:"https://maps.google.com/?q=Cheile+Zarnestilor",desc:"הליכה קלילה בקניון ~2 ק\"מ בין מצוקים. מתאים גם לילדים קטנים"},
+ {id:"aventura",name:"🎢 Parc Aventura Brașov",lat:45.612414,lng:25.636275,cat:"אקסטרים",area:"בראשוב",rt:"4.7",link:"https://www.parc-aventura.ro/",desc:"פארק החבלים הגדול ברומניה, 8 מסלולים מדורגים, זיפליין מעל אגם. מגיל 4"},
+ {id:"postavaru",name:"🚡 גונדולה Postăvarul (Poiana)",lat:45.588020,lng:25.552799,cat:"טבע",area:"בראשוב",rt:"",link:"https://www.discoverpoiana.ro/ro/instalatii",desc:"גונדולה מהירה לפסגה ~1727מ, נוף. אפשר לרדת ברגל"},
+ {id:"libearty",name:"🐻 שמורת דובים Libearty",lat:45.594816,lng:25.379514,cat:"חיות",area:"בראשוב",rt:"4.7",link:"https://millionsoffriends.org/en/libearty/",desc:"מקלט דובים. סיור מודרך (9/10/11), סגור שני! הזמנה מראש. להגיע 10:00"},
+ {id:"zarnesti",name:"🥾 ערוץ זרנשט",lat:45.535817,lng:25.292071,cat:"טבע",area:"בראשוב",rt:"4.7",link:"https://maps.google.com/?q=Cheile+Zarnestilor",desc:"הליכה קלילה בקניון ~2 ק\"מ בין מצוקים. מתאים גם לילדים קטנים"},
  {id:"tampa",name:"🚡 רכבל Tâmpa (בראשוב)",lat:45.6389,lng:25.5932,cat:"טבע",area:"בראשוב",rt:"3.5",link:"https://maps.google.com/?q=Telecabina+Tampa+Brasov",desc:"רכבל מהעיר לפסגה, נוף פנורמי + שלט BRAȘOV הענק"},
  {id:"sfatului",name:"🏛️ בראשוב העיר העתיקה",lat:45.6425,lng:25.5887,cat:"תרבות",area:"בראשוב",rt:"",link:"https://maps.google.com/?q=Piata+Sfatului+Brasov",desc:"כיכר Sfatului, לב העיר. אידאלי לשבת רגלית. סיור ערב מואר"},
- {id:"prejmer",name:"🏎️ קרטינג Prejmer",lat:45.7100,lng:25.7500,cat:"קרטינג",area:"בראשוב",rt:"4.7",link:"https://prejmer-raceway.com/",desc:"מסלול חוץ ~1.2 ק\"מ, ~20 דק' מבראשוב. קרט כפול לילדים בליווי. לתאם מראש"},
+ {id:"prejmer",name:"🏎️ קרטינג Prejmer",lat:45.746070,lng:25.770130,cat:"קרטינג",area:"בראשוב",rt:"4.7",link:"https://prejmer-raceway.com/",desc:"מסלול חוץ ~1.2 ק\"מ, ~20 דק' מבראשוב. קרט כפול לילדים בליווי. לתאם מראש"},
  {id:"zoobrasov",name:"🦁 גן חיות בראשוב",lat:45.6141,lng:25.6337,cat:"חיות",area:"בראשוב",rt:"",link:"https://zoobrasov.ro/en/",desc:"~300 חיות ביער ליד אגם Noua"},
  {id:"therme",name:"💧 Therme București",lat:44.6055,lng:26.0854,cat:"מים",area:"בוקרשט",rt:"4.1",link:"https://therme.ro/",desc:"פארק מים/ספא הגדול באירופה, 16 מגלשות. Galaxy לילדים. יום שלם. סיום הטיול"},
  {id:"slanic",name:"🧂 מכרה מלח סלניק",lat:45.2358,lng:25.9420,cat:"משפחתי",area:"בוקרשט",rt:"4.1",link:"https://primariaslanic.ro/",desc:"מכרה מלח ענק, מגרשי משחק. קר (~12°, מעילים!). סגור א׳, 09-15"},
@@ -159,7 +160,7 @@ const POIS = [
  {id:"antipa",name:"🦖 מוזיאון הטבע Antipa",lat:44.4531,lng:26.0846,cat:"מוזיאון",area:"בוקרשט",rt:"4.5",link:"https://antipa.ro/",desc:"דיורמות אינטראקטיביות, דינוזאורים, חרקים. ידידותי לילדים. 2+ שעות"},
  {id:"mina",name:"🌀 MINA אימרסיבי",lat:44.4790,lng:26.1173,cat:"מוזיאון",area:"בוקרשט",rt:"3.9",link:"https://www.minamuseum.com/",desc:"הקרנות 360°, אור/סאונד מגיבים + אזור ילדים 3–9. חוויה חושית"},
  {id:"herastrau",name:"🌳 פארק Herăstrău",lat:44.4781,lng:26.0814,cat:"טבע",area:"בוקרשט",rt:"4.5",link:"https://maps.google.com/?q=Parcul+Herastrau",desc:"פארק אגם ענק, שיט, אופניים, מוזיאון כפר. כניסה חופשית"},
- {id:"amckart",name:"🏎️ קרטינג AMCKART",lat:44.5560,lng:26.1440,cat:"קרטינג",area:"בוקרשט",rt:"4.6",link:"https://www.amckart.ro/",desc:"מסלול חוץ ~1.24 ק\"מ. גובה מינ' ~120 ס\"מ. לילדים גדולים/נוער"},
+ {id:"amckart",name:"🏎️ קרטינג AMCKART",lat:44.536637,lng:26.150364,cat:"קרטינג",area:"בוקרשט",rt:"4.6",link:"https://www.amckart.ro/",desc:"מסלול חוץ ~1.24 ק\"מ. גובה מינ' ~120 ס\"מ. לילדים גדולים/נוער"},
  {id:"zoobuc",name:"🦁 גן חיות בוקרשט",lat:44.5174,lng:26.1039,cat:"חיות",area:"בוקרשט",rt:"3.2",link:"https://bucurestizoo.ro/en/",desc:"גן חיות ביער בניאסה, 150+ מינים. להגיע בבוקר"}
 ];
 
@@ -189,13 +190,18 @@ function popupHtml(p){
   const fam = st.count
     ? `<span class="fam">👨‍👩‍👧 ${st.count} ביקורות משפחה${st.avg?` · ★ ${st.avg.toFixed(1)}`:''}</span>`
     : `<span class="fam none">👨‍👩‍👧 אין עדיין ביקורות משפחה</span>`;
+  // לינק ניווט שנגזר מהקואורדינטה של הסיכה — כך המיקום בגוגל מפות תמיד תואם למפה
+  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
+  const isMapsLink = /google\.[^/]*\/maps|maps\.google|[?&]q=|query=/.test(p.link||'');
+  const siteUrl = (p.link && !isMapsLink) ? p.link : '';
   return `<div class="pop"><span class="cat">${esc(p.area)} · ${esc(p.cat)}</span>
     <b>${esc(p.name)}</b> ${rt}
     <p>${esc(p.desc)}</p>
     ${fam}
     <div class="acts">
-      <a href="${esc(p.link)}" target="_blank" rel="noopener">לינק ↗</a>
-      <button id="rev-btn-${p.id}">📝 ביקורות משפחה (${st.count})</button>
+      <a href="${mapUrl}" target="_blank" rel="noopener">📍 גוגל מפות</a>
+      ${siteUrl?`<a href="${esc(siteUrl)}" target="_blank" rel="noopener">🌐 אתר</a>`:''}
+      <button id="rev-btn-${p.id}">📝 ביקורות (${st.count})</button>
     </div></div>`;
 }
 
