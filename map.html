@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מפת טיול רומניה · אוגוסט 2026</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗺️</text></svg>">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<style>
+  :root{
+    --ground:#f1f4f0; --surface:#fff; --ink:#15231c; --muted:#5b6a61; --line:#e0e6df;
+    --fag:#2f6d4f; --bra:#2b6079; --buc:#b07514; --stay:#c0392b; --trans:#34495e;
+    --star:#c99a2e; --shadow:0 2px 12px rgba(20,40,30,.10);
+    --sans:system-ui,"Segoe UI",Roboto,"Noto Sans Hebrew",Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{font-family:var(--sans);color:var(--ink);background:var(--ground);overflow:hidden}
+  .app{display:flex;flex-direction:column;height:100%}
+
+  header{background:var(--surface);border-bottom:1px solid var(--line);padding:9px 14px;
+    display:flex;align-items:center;gap:10px;z-index:1001;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+  header h1{font-size:1rem;margin:0;flex:1;letter-spacing:.2px}
+  header .sub{font-size:.72rem;color:var(--muted);font-weight:400}
+  header button{font-family:var(--sans);font-size:.8rem;font-weight:700;border:1px solid var(--line);
+    background:var(--ground);color:var(--ink);border-radius:9px;padding:7px 11px;cursor:pointer;white-space:nowrap}
+  header button:hover{background:#e7ede6}
+
+  .legend{display:flex;gap:5px;overflow-x:auto;padding:7px 14px;background:var(--surface);
+    border-bottom:1px solid var(--line);font-size:.72rem}
+  .legend span{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;color:var(--muted);font-weight:600}
+  .legend i{width:11px;height:11px;border-radius:50%;display:inline-block}
+
+  .main{flex:1;position:relative;min-height:0}
+  #map{position:absolute;inset:0;z-index:1}
+  .leaflet-popup-content{margin:12px 14px;direction:rtl;font-family:var(--sans);min-width:200px}
+  .pop b{font-size:.98rem;display:block;margin-bottom:2px}
+  .pop .cat{font-size:.7rem;color:var(--muted);font-weight:700}
+  .pop .rt{color:var(--star);font-weight:800;font-size:.82rem}
+  .pop .fam{display:block;margin-top:6px;font-size:.76rem;font-weight:700;color:var(--fag)}
+  .pop .fam.none{color:var(--muted);font-weight:600}
+  .pop p{margin:7px 0;font-size:.84rem;line-height:1.5;color:#33443b}
+  .pop .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .pop a,.pop button{font-family:var(--sans);font-size:.78rem;font-weight:700;text-decoration:none;
+    border-radius:8px;padding:6px 10px;cursor:pointer;border:1px solid var(--line)}
+  .pop a{color:var(--bra);background:#eef3f6;border-color:#d6e4ec}
+  .pop button{color:#fff;background:var(--fag);border-color:var(--fag)}
+
+  /* modal */
+  .overlay{position:fixed;inset:0;background:rgba(15,25,20,.5);z-index:2000;display:none;
+    align-items:flex-end;justify-content:center}
+  .overlay.open{display:flex}
+  .sheet{background:var(--surface);width:100%;max-width:560px;max-height:88vh;border-radius:18px 18px 0 0;
+    display:flex;flex-direction:column;box-shadow:var(--shadow)}
+  @media(min-width:560px){.overlay{align-items:center}.sheet{border-radius:18px;max-height:82vh}}
+  .sheet-h{display:flex;align-items:center;gap:10px;padding:15px 18px;border-bottom:1px solid var(--line)}
+  .sheet-h h2{font-size:1.05rem;margin:0;flex:1}
+  .sheet-h button{border:none;background:var(--ground);border-radius:8px;width:32px;height:32px;
+    font-size:1.1rem;cursor:pointer;color:var(--muted)}
+  .sheet-body{overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:14px}
+
+  .rev{border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:#fbfdfb}
+  .rev .top{display:flex;align-items:center;gap:8px;font-size:.85rem}
+  .rev .top b{font-weight:750}
+  .rev .top .stars{color:var(--star);letter-spacing:1px}
+  .rev .top time{margin-inline-start:auto;font-size:.7rem;color:var(--muted)}
+  .rev p{margin:6px 0 0;font-size:.88rem;line-height:1.5;color:#2b3a31}
+  .empty{color:var(--muted);font-size:.86rem;text-align:center;padding:14px}
+
+  form.addrev{display:flex;flex-direction:column;gap:9px;border-top:1px dashed var(--line);padding-top:14px}
+  form.addrev label{font-size:.75rem;font-weight:700;color:var(--muted)}
+  form.addrev input,form.addrev textarea{font-family:var(--sans);font-size:.92rem;padding:9px 11px;
+    border:1px solid var(--line);border-radius:9px;width:100%;background:var(--surface)}
+  form.addrev textarea{resize:vertical;min-height:64px}
+  .starpick{display:flex;flex-direction:row-reverse;gap:3px;justify-content:flex-end;font-size:1.5rem;cursor:pointer}
+  .starpick input{display:none}
+  .starpick label{color:#d7ddd7;transition:color .1s;cursor:pointer;font-size:1.5rem}
+  .starpick label:hover,.starpick label:hover ~ label,
+  .starpick input:checked ~ label{color:var(--star)}
+  form.addrev button{background:var(--fag);color:#fff;border:none;border-radius:10px;padding:11px;
+    font-size:.95rem;font-weight:700;cursor:pointer;font-family:var(--sans)}
+  form.addrev button:disabled{opacity:.5;cursor:not-allowed}
+  .notice{background:#fdf6ec;border:1px solid #f0dcbb;border-radius:10px;padding:10px 12px;font-size:.8rem;color:#6b5220}
+  .cfgwarn{background:#fdecea;border:1px solid #f5c6c0;border-radius:10px;padding:10px 12px;font-size:.8rem;color:#7a2820}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div style="flex:1">
+      <h1>🗺️ מפת טיול רומניה <span class="sub">· אוגוסט 2026</span></h1>
+    </div>
+    <a href="index.html" style="text-decoration:none;font-size:.8rem;font-weight:700;border:1px solid var(--line);background:var(--ground);color:var(--ink);border-radius:9px;padding:7px 11px;white-space:nowrap">🧭 מדריך</a>
+    <button id="suggestBtn">💡 הצעות</button>
+    <button id="allReviews">📝 ביקורות</button>
+  </header>
+  <div class="legend">
+    <span><i style="background:var(--fag)"></i>פגאראש/סיביו</span>
+    <span><i style="background:var(--bra)"></i>בראשוב</span>
+    <span><i style="background:var(--buc)"></i>בוקרשט</span>
+    <span><i style="background:var(--stay)"></i>לינה</span>
+    <span><i style="background:var(--trans)"></i>תחבורה</span>
+  </div>
+  <div class="main"><div id="map"></div></div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="sheet" role="dialog" aria-modal="true">
+    <div class="sheet-h"><h2 id="sheetTitle">ביקורות</h2><button id="closeSheet" aria-label="סגור">✕</button></div>
+    <div class="sheet-body" id="sheetBody"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+/* ============================================================
+   הגדרה: הדבק כאן את כתובת ה-Apps Script שלך (מסתיים ב-/exec)
+   ראה הוראות ב-README.md
+   ============================================================ */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwJBISpWWpkDL9U9RX9VLWFfVnF5fpElhEr5uK4coYhv8SX-tevo0R8uZI8jcTh7GxvXg/exec";
+
+const AREA_COLORS = {"פגאראש":"#2f6d4f","בראשוב":"#2b6079","בוקרשט":"#b07514"};
+function colorFor(p){
+  if(p.cat==="לינה") return "#c0392b";
+  if(p.cat==="תחבורה") return "#34495e";
+  return AREA_COLORS[p.area] || "#2f6d4f";
+}
+
+const POIS = [
+ {id:"lodging1",name:"🏠 Airport Therme Residence",lat:44.621600,lng:26.102190,cat:"לינה",area:"בוקרשט",rt:"",link:"https://www.google.com/maps/search/?api=1&query=Airport+Therme+Residence+Balotesti",desc:"לינה 16–17.8 + 25–27.8 · ליד שדה OTP · Soseaua Unirii 160a"},
+ {id:"lodging2",name:"🏠 Horace Guesthouse — דז'אני",lat:45.710710,lng:24.931860,cat:"לינה",area:"פגאראש",rt:"",link:"https://www.google.com/maps/search/?api=1&query=Horace+Guesthouse+Dejani",desc:"לינה 17–21.8 · בריכה, ג'קוזי, נהר"},
+ {id:"lodging3",name:"🏠 דירת Sonia — בראשוב",lat:45.648757,lng:25.584278,cat:"לינה",area:"בראשוב",rt:"",link:"https://www.google.com/maps/search/?api=1&query=Strada+Stefan+Octavian+Iosif+31+Brasov",desc:"לינה 21–25.8 · מרכז העיר (יש מדרגות)"},
+ {id:"otp",name:"✈️ שדה תעופה OTP + Sixt",lat:44.571110,lng:26.085000,cat:"תחבורה",area:"בוקרשט",rt:"",link:"https://www.sixt.ro",desc:"איסוף ואן 16.8 20:30 · החזרה 27.8 04:00"},
+ {id:"balea",name:"⛰️ טרנספגאראשן + אגם באלאה",lat:45.6028,lng:24.6172,cat:"טבע",area:"פגאראש",rt:"4.6",link:"https://maps.google.com/?q=Balea+Lac",desc:"כביש הררי ~90 ק\"מ + אגם קרחוני 2042מ. חצי יום עד יום. בוקר אמצע-שבוע פחות עמוס"},
+ {id:"telecabina",name:"🚡 רכבל באלאה",lat:45.6365,lng:24.6069,cat:"טבע",area:"פגאראש",rt:"4.5",link:"https://muntii-fagaras.ro/en/cablecar",desc:"עלייה לאגם ממפל באלאה. הדרך הנוחה לראות את הכביש"},
+ {id:"dragus",name:"🎢 פארק הרפתקאות Drăguș",lat:45.694391,lng:24.778457,cat:"אקסטרים",area:"פגאראש",rt:"4.3",link:"https://www.aventura-dragus.ro/en/",desc:"פארק חבלים מדורג לכל הגילאים, מסלול טרולים לילדים מגיל ~4"},
+ {id:"sambata",name:"⛪ מנזר סמבטה",lat:45.690100,lng:24.794700,cat:"תרבות",area:"פגאראש",rt:"4.6",link:"https://www.manastireabrancoveanu.ro/",desc:"מנזר יפהפה עם גנים למרגלות ההרים. ~1 ק\"מ מדרגוש"},
+ {id:"fagaras",name:"🏰 מבצר פגאראש",lat:45.8453,lng:24.9738,cat:"טירה",area:"פגאראש",rt:"4.7",link:"https://www.cetateafagarasului.com/",desc:"מצודה מהמאה 14 מוקפת חפיר מים + מוזיאון. ~שעה-שעה וחצי"},
+ {id:"astra",name:"🏘️ מוזיאון ASTRA",lat:45.7552,lng:24.1161,cat:"משפחתי",area:"פגאראש",rt:"4.8",link:"https://www.muzeulastra.com/",desc:"מוזיאון פתוח ענק (~400 מבנים), חיות, מגרשי משחק. 3+ שעות. אוטובוס 13 מהעיר"},
+ {id:"zoosibiu",name:"🦁 גן חיות סיביו",lat:45.762466,lng:24.123596,cat:"חיות",area:"פגאראש",rt:"4.3",link:"https://www.zoosibiu.ro/",desc:"גן החיות הוותיק ברומניה ביער ליד אגם. אפשר סירה"},
+ {id:"sibiu",name:"🏛️ סיביו העיר העתיקה",lat:45.7975,lng:24.1519,cat:"תרבות",area:"פגאראש",rt:"4.6",link:"https://maps.google.com/?q=Piata+Mare+Sibiu",desc:"הכיכר הגדולה (אונסק\"ו), גשר השקרים, גגות דמויי עיניים"},
+ {id:"ocna",name:"🧂 אגמי מלח Ocna Sibiului",lat:45.876953,lng:24.063323,cat:"מים",area:"פגאראש",rt:"4.2",link:"http://www.sibiu-turism.ro/",desc:"אגמי מלח ובוץ, צפים כמו בים המלח. להגיע מוקדם לכיסאות"},
+ {id:"peles",name:"🏰 טירת פלש (סינאיה)",lat:45.3600,lng:25.5425,cat:"טירה",area:"בראשוב",rt:"4.6",link:"https://peles-castle.ro/peles-castle/",desc:"ארמון מפואר, ~160 חדרים. סיור מודרך בלבד. נפתח 11:00. סגור ב+ג"},
+ {id:"bran",name:"🧛 טירת בראן (דרקולה)",lat:45.5149,lng:25.3676,cat:"טירה",area:"בראשוב",rt:"4.3",link:"https://www.bran-castle.com/en/",desc:"הטירה המפורסמת + מנהרת זמן. ~2–3 שעות. צפוף בעונה"},
+ {id:"rasnov",name:"🏰 מבצר רשנוב",lat:45.5906,lng:25.4693,cat:"טירה",area:"בראשוב",rt:"4.0",link:"https://maps.google.com/?q=Cetatea+Rasnov",desc:"מבצר איכרים מהמאה 13 על גבעה, נוף מרהיב. עגלת טרקטור למעלה"},
+ {id:"dino",name:"🦕 Dino Parc Râșnov",lat:45.5915,lng:25.4741,cat:"משפחתי",area:"בראשוב",rt:"🏆",link:"https://dinoparc.ro/en/",desc:"120+ דינוזאורים בגודל טבעי, מגרשי משחק, קולנוע. צמוד לרשנוב"},
+ {id:"aventura",name:"🎢 Parc Aventura Brașov",lat:45.612414,lng:25.636275,cat:"אקסטרים",area:"בראשוב",rt:"4.7",link:"https://www.parc-aventura.ro/",desc:"פארק החבלים הגדול ברומניה, 8 מסלולים מדורגים, זיפליין מעל אגם. מגיל 4"},
+ {id:"postavaru",name:"🚡 גונדולה Postăvarul (Poiana)",lat:45.588020,lng:25.552799,cat:"טבע",area:"בראשוב",rt:"",link:"https://www.discoverpoiana.ro/ro/instalatii",desc:"גונדולה מהירה לפסגה ~1727מ, נוף. אפשר לרדת ברגל"},
+ {id:"libearty",name:"🐻 שמורת דובים Libearty",lat:45.594816,lng:25.379514,cat:"חיות",area:"בראשוב",rt:"4.7",link:"https://millionsoffriends.org/en/libearty/",desc:"מקלט דובים. סיור מודרך (9/10/11), סגור שני! הזמנה מראש. להגיע 10:00"},
+ {id:"zarnesti",name:"🥾 ערוץ זרנשט",lat:45.535817,lng:25.292071,cat:"טבע",area:"בראשוב",rt:"4.7",link:"https://maps.google.com/?q=Cheile+Zarnestilor",desc:"הליכה קלילה בקניון ~2 ק\"מ בין מצוקים. מתאים גם לילדים קטנים"},
+ {id:"tampa",name:"🚡 רכבל Tâmpa (בראשוב)",lat:45.6389,lng:25.5932,cat:"טבע",area:"בראשוב",rt:"3.5",link:"https://maps.google.com/?q=Telecabina+Tampa+Brasov",desc:"רכבל מהעיר לפסגה, נוף פנורמי + שלט BRAȘOV הענק"},
+ {id:"sfatului",name:"🏛️ בראשוב העיר העתיקה",lat:45.6425,lng:25.5887,cat:"תרבות",area:"בראשוב",rt:"",link:"https://maps.google.com/?q=Piata+Sfatului+Brasov",desc:"כיכר Sfatului, לב העיר. אידאלי לשבת רגלית. סיור ערב מואר"},
+ {id:"prejmer",name:"🏎️ קרטינג Prejmer",lat:45.746070,lng:25.770130,cat:"קרטינג",area:"בראשוב",rt:"4.7",link:"https://prejmer-raceway.com/",desc:"מסלול חוץ ~1.2 ק\"מ, ~20 דק' מבראשוב. קרט כפול לילדים בליווי. לתאם מראש"},
+ {id:"zoobrasov",name:"🦁 גן חיות בראשוב",lat:45.6141,lng:25.6337,cat:"חיות",area:"בראשוב",rt:"",link:"https://zoobrasov.ro/en/",desc:"~300 חיות ביער ליד אגם Noua"},
+ {id:"therme",name:"💧 Therme București",lat:44.6055,lng:26.0854,cat:"מים",area:"בוקרשט",rt:"4.1",link:"https://therme.ro/",desc:"פארק מים/ספא הגדול באירופה, 16 מגלשות. Galaxy לילדים. יום שלם. סיום הטיול"},
+ {id:"slanic",name:"🧂 מכרה מלח סלניק",lat:45.2358,lng:25.9420,cat:"משפחתי",area:"בוקרשט",rt:"4.1",link:"https://primariaslanic.ro/",desc:"מכרה מלח ענק, מגרשי משחק. קר (~12°, מעילים!). סגור א׳, 09-15"},
+ {id:"parliament",name:"🏛️ ארמון הפרלמנט",lat:44.4275,lng:26.0875,cat:"תרבות",area:"בוקרשט",rt:"4.2",link:"https://cic.cdep.ro/en/vizitare",desc:"הבניין השני בגודלו בעולם. סיור מודרך 45–60 דק'. הזמנה מראש + דרכון"},
+ {id:"antipa",name:"🦖 מוזיאון הטבע Antipa",lat:44.4531,lng:26.0846,cat:"מוזיאון",area:"בוקרשט",rt:"4.5",link:"https://antipa.ro/",desc:"דיורמות אינטראקטיביות, דינוזאורים, חרקים. ידידותי לילדים. 2+ שעות"},
+ {id:"mina",name:"🌀 MINA אימרסיבי",lat:44.4790,lng:26.1173,cat:"מוזיאון",area:"בוקרשט",rt:"3.9",link:"https://www.minamuseum.com/",desc:"הקרנות 360°, אור/סאונד מגיבים + אזור ילדים 3–9. חוויה חושית"},
+ {id:"herastrau",name:"🌳 פארק Herăstrău",lat:44.4781,lng:26.0814,cat:"טבע",area:"בוקרשט",rt:"4.5",link:"https://maps.google.com/?q=Parcul+Herastrau",desc:"פארק אגם ענק, שיט, אופניים, מוזיאון כפר. כניסה חופשית"},
+ {id:"amckart",name:"🏎️ קרטינג AMCKART",lat:44.536637,lng:26.150364,cat:"קרטינג",area:"בוקרשט",rt:"4.6",link:"https://www.amckart.ro/",desc:"מסלול חוץ ~1.24 ק\"מ. גובה מינ' ~120 ס\"מ. לילדים גדולים/נוער"},
+ {id:"zoobuc",name:"🦁 גן חיות בוקרשט",lat:44.5174,lng:26.1039,cat:"חיות",area:"בוקרשט",rt:"3.2",link:"https://bucurestizoo.ro/en/",desc:"גן חיות ביער בניאסה, 150+ מינים. להגיע בבוקר"}
+];
+
+// ---------- state + map ----------
+let ALL_REVIEWS = [];
+let ALL_SUGGESTIONS = [];
+const map = L.map('map',{zoomControl:true}).setView([45.4,25.2],7);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+  maxZoom:19, attribution:'&copy; OpenStreetMap'
+}).addTo(map);
+
+const markers = {};
+POIS.forEach(p=>{
+  const m = L.circleMarker([p.lat,p.lng],{
+    radius: p.cat==="לינה"?9:7, color:"#fff", weight:2,
+    fillColor: colorFor(p), fillOpacity:1
+  }).addTo(map);
+  m.bindPopup(popupHtml(p));
+  m.on('popupopen',()=>{ const b=document.getElementById('rev-btn-'+p.id); if(b) b.onclick=()=>openReviews(p); });
+  markers[p.id]=m;
+});
+
+function esc(s){return (s||"").replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function popupHtml(p){
+  const rt = p.rt? `<span class="rt">★ ${p.rt}</span>`:"";
+  const st = reviewStats(p.id);
+  const fam = st.count
+    ? `<span class="fam">👨‍👩‍👧 ${st.count} ביקורות משפחה${st.avg?` · ★ ${st.avg.toFixed(1)}`:''}</span>`
+    : `<span class="fam none">👨‍👩‍👧 אין עדיין ביקורות משפחה</span>`;
+  // לינק ניווט שנגזר מהקואורדינטה של הסיכה — כך המיקום בגוגל מפות תמיד תואם למפה
+  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
+  const isMapsLink = /google\.[^/]*\/maps|maps\.google|[?&]q=|query=/.test(p.link||'');
+  const siteUrl = (p.link && !isMapsLink) ? p.link : '';
+  return `<div class="pop"><span class="cat">${esc(p.area)} · ${esc(p.cat)}</span>
+    <b>${esc(p.name)}</b> ${rt}
+    <p>${esc(p.desc)}</p>
+    ${fam}
+    <div class="acts">
+      <a href="${mapUrl}" target="_blank" rel="noopener">📍 גוגל מפות</a>
+      ${siteUrl?`<a href="${esc(siteUrl)}" target="_blank" rel="noopener">🌐 אתר</a>`:''}
+      <button id="rev-btn-${p.id}">📝 ביקורות (${st.count})</button>
+    </div></div>`;
+}
+
+// ---------- reviews backend (Google Apps Script) ----------
+const configured = SCRIPT_URL && !SCRIPT_URL.includes("PASTE_YOUR");
+
+function jsonp(url){
+  return new Promise((resolve,reject)=>{
+    const cb='cb_'+Math.floor(Math.random()*1e9);
+    window[cb]=d=>{resolve(d);cleanup();};
+    const s=document.createElement('script');
+    s.src=url+(url.includes('?')?'&':'?')+'callback='+cb;
+    s.onerror=()=>{reject(new Error('load'));cleanup();};
+    function cleanup(){delete window[cb];s.remove();}
+    document.body.appendChild(s);
+  });
+}
+async function loadReviews(){
+  if(configured){
+    try{
+      const d = await jsonp(SCRIPT_URL);
+      // תמיכה גם בפורמט אובייקט {reviews, suggestions} וגם במערך ישן
+      if(Array.isArray(d)){ ALL_REVIEWS = d; }
+      else { ALL_REVIEWS = d.reviews || []; ALL_SUGGESTIONS = d.suggestions || []; }
+    }catch(e){ /* שומרים על מה שיש */ }
+  }
+  refreshPopups();
+}
+function reviewsFor(id){ return ALL_REVIEWS.filter(r=>r.poi===id); }
+function reviewStats(id){
+  const list=reviewsFor(id);
+  const nums=list.map(r=>parseInt(r.rating)||0).filter(n=>n>0);
+  const avg=nums.length? nums.reduce((a,b)=>a+b,0)/nums.length : 0;
+  return {count:list.length, avg:avg};
+}
+// מרענן את תוכן החלוניות ומדגיש מוקדים שכבר יש להם ביקורות משפחה
+function refreshPopups(){
+  POIS.forEach(p=>{
+    const m=markers[p.id]; if(!m) return;
+    const has=reviewStats(p.id).count>0;
+    m.setPopupContent(popupHtml(p));
+    m.setStyle({
+      radius:(p.cat==="לינה"?9:7)+(has?2:0),
+      weight:has?3:2,
+      color:has?"#c99a2e":"#fff"
+    });
+  });
+}
+function stars(n){ n=Math.max(0,Math.min(5,parseInt(n)||0)); return "★".repeat(n)+"☆".repeat(5-n); }
+
+const overlay=document.getElementById('overlay');
+const sheetBody=document.getElementById('sheetBody');
+const sheetTitle=document.getElementById('sheetTitle');
+document.getElementById('closeSheet').onclick=()=>overlay.classList.remove('open');
+overlay.onclick=e=>{ if(e.target===overlay) overlay.classList.remove('open'); };
+
+async function openReviews(p){
+  sheetTitle.textContent=p.name;
+  sheetBody.innerHTML='<div class="empty">טוען…</div>';
+  overlay.classList.add('open');
+  await loadReviews();
+  renderPoi(p);
+}
+function renderPoi(p){
+  const list=reviewsFor(p.id);
+  let html='';
+  if(!configured){
+    html+=`<div class="cfgwarn">⚠️ מערכת הביקורות עדיין לא חוברה. יש להדביק את כתובת ה-Apps Script בקובץ (ראה README).</div>`;
+  }
+  if(list.length){
+    html+=list.map(r=>`<div class="rev"><div class="top"><b>${esc(r.name||'אנונימי')}</b>
+      <span class="stars">${stars(r.rating)}</span><time>${esc((r.timestamp||'').slice(0,10))}</time></div>
+      <p>${esc(r.comment)}</p></div>`).join('');
+  }else{
+    html+=`<div class="empty">אין עדיין ביקורות. היו הראשונים! 👇</div>`;
+  }
+  html+=formHtml(p.id);
+  sheetBody.innerHTML=html;
+  wireForm(p);
+}
+function formHtml(poi){
+  const dis=configured?"":"disabled";
+  return `<form class="addrev" id="frm">
+    <label>השם שלך</label><input name="name" maxlength="40" placeholder="למשל: אבא / דניאל" ${dis}>
+    <label>דירוג</label>
+    <div class="starpick">
+      ${[5,4,3,2,1].map(n=>`<input type="radio" name="rating" id="s${n}" value="${n}" ${dis}><label for="s${n}" title="${n}">★</label>`).join('')}
+    </div>
+    <label>הערה / ביקורת</label><textarea name="comment" maxlength="600" placeholder="מה חשבתם? טיפים? כדאי/לא כדאי?" ${dis}></textarea>
+    <button type="submit" ${dis}>שליחת ביקורת</button>
+    ${configured?'<div class="notice">הביקורת תופיע לכל המשפחה (נאספת ל-Google Sheet).</div>':''}
+  </form>`;
+}
+function wireForm(p){
+  const f=document.getElementById('frm'); if(!f||!configured) return;
+  f.onsubmit=async e=>{
+    e.preventDefault();
+    const fd=new FormData(f);
+    const rev={poi:p.id, name:(fd.get('name')||'אנונימי').trim(), rating:fd.get('rating')||'', comment:(fd.get('comment')||'').trim()};
+    if(!rev.comment){ alert('נא לכתוב הערה'); return; }
+    const btn=f.querySelector('button'); btn.disabled=true; btn.textContent='שולח…';
+    try{
+      await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',
+        headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(rev)});
+      rev.timestamp=new Date().toISOString();
+      ALL_REVIEWS.push(rev);
+      renderPoi(p);
+      setTimeout(loadReviews, 1500);
+    }catch(err){
+      btn.disabled=false; btn.textContent='שליחת ביקורת';
+      alert('שגיאה בשליחה. נסו שוב.');
+    }
+  };
+}
+
+// ---------- all reviews ----------
+document.getElementById('allReviews').onclick=async()=>{
+  sheetTitle.textContent='📝 כל הביקורות';
+  sheetBody.innerHTML='<div class="empty">טוען…</div>';
+  overlay.classList.add('open');
+  await loadReviews();
+  const byPoi={};
+  ALL_REVIEWS.forEach(r=>{(byPoi[r.poi]=byPoi[r.poi]||[]).push(r);});
+  const names=Object.fromEntries(POIS.map(p=>[p.id,p.name]));
+  let html = ALL_REVIEWS.length? "" : '<div class="empty">אין עדיין ביקורות במערכת.</div>';
+  if(!configured) html='<div class="cfgwarn">⚠️ מערכת הביקורות עדיין לא חוברה (ראה README).</div>'+html;
+  Object.keys(byPoi).forEach(id=>{
+    html+=`<div><b style="font-size:.95rem">${esc(names[id]||id)}</b>`;
+    html+=byPoi[id].map(r=>`<div class="rev" style="margin-top:8px"><div class="top"><b>${esc(r.name||'אנונימי')}</b>
+      <span class="stars">${stars(r.rating)}</span><time>${esc((r.timestamp||'').slice(0,10))}</time></div>
+      <p>${esc(r.comment)}</p></div>`).join('');
+    html+=`</div>`;
+  });
+  sheetBody.innerHTML=html;
+};
+
+// ---------- suggestions ----------
+document.getElementById('suggestBtn').onclick=async()=>{
+  sheetTitle.textContent='💡 הצעות חדשות מהמשפחה';
+  sheetBody.innerHTML='<div class="empty">טוען…</div>';
+  overlay.classList.add('open');
+  await loadReviews();
+  renderSuggestions();
+};
+function renderSuggestions(){
+  let html='';
+  if(!configured) html+=`<div class="cfgwarn">⚠️ המערכת עדיין לא חוברה (ראה README).</div>`;
+  html+=`<div class="notice">הציעו מקומות/פעילויות חדשים שלא במפה — כל המשפחה תראה ותוכל להגיב.</div>`;
+  if(ALL_SUGGESTIONS.length){
+    html+=ALL_SUGGESTIONS.map(s=>`<div class="rev"><div class="top"><b>${esc(s.place)}</b>
+      ${s.where?`<span style="color:var(--muted);font-size:.8rem">📍 ${esc(s.where)}</span>`:''}
+      <time>${esc((s.timestamp||'').slice(0,10))}</time></div>
+      ${s.reason?`<p>${esc(s.reason)}</p>`:''}
+      <div style="font-size:.72rem;color:var(--muted);margin-top:5px">— ${esc(s.name||'אנונימי')}${s.link?` · <a href="${esc(s.link)}" target="_blank" rel="noopener" style="color:var(--bra)">קישור ↗</a>`:''}</div>
+      </div>`).join('');
+  }else{
+    html+=`<div class="empty">אין עדיין הצעות. היו הראשונים! 👇</div>`;
+  }
+  html+=suggestFormHtml();
+  sheetBody.innerHTML=html;
+  wireSuggestForm();
+}
+function suggestFormHtml(){
+  const dis=configured?"":"disabled";
+  return `<form class="addrev" id="sfrm">
+    <label>השם שלך</label><input name="name" maxlength="40" placeholder="מי מציע?" ${dis}>
+    <label>מה מציעים? (מקום / פעילות)</label><input name="place" maxlength="80" placeholder="למשל: פארק מים / מסעדה / אטרקציה" ${dis}>
+    <label>איפה? (אזור/עיר — לא חובה)</label><input name="where" maxlength="60" placeholder="בראשוב / סיביו / בדרך…" ${dis}>
+    <label>קישור (לא חובה)</label><input name="link" type="url" maxlength="200" placeholder="https://…" ${dis}>
+    <label>למה כדאי?</label><textarea name="reason" maxlength="500" placeholder="כמה מילים על ההצעה" ${dis}></textarea>
+    <button type="submit" ${dis}>שליחת הצעה</button>
+  </form>`;
+}
+function wireSuggestForm(){
+  const f=document.getElementById('sfrm'); if(!f||!configured) return;
+  f.onsubmit=async e=>{
+    e.preventDefault();
+    const fd=new FormData(f);
+    const s={type:'suggestion', name:(fd.get('name')||'אנונימי').trim(),
+      place:(fd.get('place')||'').trim(), where:(fd.get('where')||'').trim(),
+      link:(fd.get('link')||'').trim(), reason:(fd.get('reason')||'').trim()};
+    if(!s.place){ alert('נא לכתוב מה מציעים'); return; }
+    const btn=f.querySelector('button'); btn.disabled=true; btn.textContent='שולח…';
+    try{
+      await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',
+        headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(s)});
+      s.timestamp=new Date().toISOString();
+      ALL_SUGGESTIONS.push(s);
+      renderSuggestions();
+      setTimeout(loadReviews,1500);
+    }catch(err){ btn.disabled=false; btn.textContent='שליחת הצעה'; alert('שגיאה בשליחה. נסו שוב.'); }
+  };
+}
+
+loadReviews();
+</script>
+</body>
+</html>
