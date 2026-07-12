@@ -7,6 +7,16 @@
  * ומעתיקים את כתובת ה-/exec לתוך index.html (SCRIPT_URL).
  */
 
+/* ── הדבק כאן את מזהה הגיליון (ID) ──
+   נדרש כשמקימים סקריפט עצמאי (למשל מהנייד דרך script.google.com).
+   ה-ID הוא החלק הארוך בקישור לגיליון: .../spreadsheets/d/<<ID>>/edit
+   אם השארת ריק — הסקריפט משתמש בגיליון המקושר (Extensions ▸ Apps Script). */
+var SHEET_ID = '';
+
+function ss_() {
+  return SHEET_ID ? SpreadsheetApp.openById(SHEET_ID) : SpreadsheetApp.getActiveSpreadsheet();
+}
+
 // כותרות העמודות לכל גיליון
 var SHEETS = {
   Reviews:     ['timestamp', 'poi', 'name', 'rating', 'comment'],
@@ -14,7 +24,7 @@ var SHEETS = {
 };
 
 function getSheet_(name) {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = ss_();
   var sh = ss.getSheetByName(name);
   if (!sh) {
     sh = ss.insertSheet(name);
