@@ -1,23 +1,18 @@
-/**
- * Google Apps Script — Backend למפת רומניה
- * מחובר ל-Google Sheet. שומר ומחזיר: (1) ביקורות על מוקדים, (2) הצעות חדשות.
- *
- * התקנה: ראה README.md — Google Sheet ▸ Extensions ▸ Apps Script,
- * מדביקים את הקוד, מפרסמים כ-Web App (Execute as: Me, Access: Anyone),
- * ומעתיקים את כתובת ה-/exec לתוך index.html (SCRIPT_URL).
- */
+// Google Apps Script - Backend for the Romania trip map.
+// Stores & returns (1) reviews per place, (2) new suggestions, in a Google Sheet.
+// Setup: see README.md. Deploy as Web App (Execute as: Me, Access: Anyone),
+// then paste the /exec URL into index.html (SCRIPT_URL).
 
-/* ── הדבק כאן את מזהה הגיליון (ID) ──
-   נדרש כשמקימים סקריפט עצמאי (למשל מהנייד דרך script.google.com).
-   ה-ID הוא החלק הארוך בקישור לגיליון: .../spreadsheets/d/<<ID>>/edit
-   אם השארת ריק — הסקריפט משתמש בגיליון המקושר (Extensions ▸ Apps Script). */
+// SHEET_ID: paste your spreadsheet ID here (the long code in the sheet URL,
+// between /d/ and /edit). Needed for a standalone script (e.g. set up from mobile).
+// Leave '' if the script is bound to the sheet (Extensions > Apps Script).
 var SHEET_ID = '';
 
 function ss_() {
   return SHEET_ID ? SpreadsheetApp.openById(SHEET_ID) : SpreadsheetApp.getActiveSpreadsheet();
 }
 
-// כותרות העמודות לכל גיליון
+// Column headers per sheet
 var SHEETS = {
   Reviews:     ['timestamp', 'poi', 'name', 'rating', 'comment'],
   Suggestions: ['timestamp', 'name', 'place', 'where', 'link', 'reason']
@@ -33,7 +28,7 @@ function getSheet_(name) {
   return sh;
 }
 
-// קורא גיליון ומחזיר מערך אובייקטים לפי שורת הכותרות
+// Read a sheet and return an array of objects keyed by the header row
 function readSheet_(name) {
   var sh = getSheet_(name);
   var values = sh.getDataRange().getValues();
@@ -56,12 +51,13 @@ function readSheet_(name) {
 }
 
 function clip_(v, n) { return String(v == null ? '' : v).slice(0, n); }
+
 function json_(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
 }
 
-// קריאה — מחזיר ביקורות + הצעות. תומך ב-JSONP (?callback=...)
+// Read - returns reviews + suggestions. Supports JSONP (?callback=...)
 function doGet(e) {
   var data = { reviews: readSheet_('Reviews'), suggestions: readSheet_('Suggestions') };
   var json = JSON.stringify(data);
@@ -73,7 +69,7 @@ function doGet(e) {
   return ContentService.createTextOutput(json).setMimeType(ContentService.MimeType.JSON);
 }
 
-// כתיבה — ביקורת או הצעה (לפי d.type). נשלח כ-text/plain כדי לעקוף CORS
+// Write - review or suggestion (by d.type). Sent as text/plain to bypass CORS.
 function doPost(e) {
   try {
     var d = JSON.parse(e.postData.contents);
@@ -81,17 +77,16 @@ function doPost(e) {
     if (d.type === 'suggestion') {
       if (!d.place) return json_({ ok: false, error: 'missing place' });
       getSheet_('Suggestions').appendRow([
-        new Date(), clip_(d.name, 40) || 'אנונימי', clip_(d.place, 80),
+        new Date(), clip_(d.name, 40) || 'anon', clip_(d.place, 80),
         clip_(d.where, 60), clip_(d.link, 200), clip_(d.reason, 500)
       ]);
       return json_({ ok: true });
     }
 
-    // ברירת מחדל: ביקורת
     var poi = clip_(d.poi, 60);
     if (!poi || !d.comment) return json_({ ok: false, error: 'missing' });
     getSheet_('Reviews').appendRow([
-      new Date(), poi, clip_(d.name, 40) || 'אנונימי',
+      new Date(), poi, clip_(d.name, 40) || 'anon',
       parseInt(d.rating) || '', clip_(d.comment, 600)
     ]);
     return json_({ ok: true });
