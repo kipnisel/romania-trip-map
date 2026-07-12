@@ -15,7 +15,6 @@
   *{box-sizing:border-box}
   body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.6}
   .wrap{max-width:1080px;margin:0 auto;padding:0 16px}
-
   header{padding:30px 0 10px;text-align:center}
   .eyebrow{font-size:.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--fag)}
   header h1{font-size:2rem;margin:.25em 0 .1em;text-wrap:balance}
@@ -39,29 +38,44 @@
 
   .grid{display:grid;gap:16px;grid-template-columns:1fr}
   @media(min-width:600px){.grid{grid-template-columns:1fr 1fr}}
-  @media(min-width:900px){.grid{grid-template-columns:1fr 1fr 1fr}}
+  @media(min-width:920px){.grid{grid-template-columns:1fr 1fr 1fr}}
 
   .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;
     box-shadow:var(--shadow);display:flex;flex-direction:column;border-top:4px solid var(--accent)}
-  .ph{height:158px;position:relative;background:#e7ede6;overflow:hidden}
-  .ph img{width:100%;height:100%;object-fit:cover;display:block}
-  .ph .noimg{width:100%;height:100%;display:flex;align-items:center;justify-content:center;
-    font-size:3rem;background:color-mix(in srgb,var(--accent) 14%,#eef2ed)}
-  .ph .rt{position:absolute;inset-inline-end:8px;inset-block-start:8px;background:rgba(0,0,0,.72);color:#ffcf5a;
-    font-weight:800;font-size:.76rem;border-radius:999px;padding:3px 9px;font-variant-numeric:tabular-nums}
-  .ph .cr{position:absolute;inset-inline-start:0;inset-block-end:0;background:rgba(0,0,0,.5);color:#fff;
-    font-size:.6rem;padding:2px 6px;border-start-end-radius:6px;max-width:80%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .body{padding:13px 15px;display:flex;flex-direction:column;gap:7px;flex:1}
+
+  .gal{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;height:185px;background:#e7ede6;scrollbar-width:none}
+  .gal::-webkit-scrollbar{display:none}
+  .slide{flex:0 0 100%;scroll-snap-align:center;position:relative}
+  .slide img{width:100%;height:185px;object-fit:cover;display:block;cursor:zoom-in}
+  .slide .cr{position:absolute;inset-inline-start:0;inset-block-end:0;background:rgba(0,0,0,.5);color:#fff;
+    font-size:.58rem;padding:2px 6px;border-start-end-radius:6px;max-width:85%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .noimg{width:100%;height:185px;display:flex;align-items:center;justify-content:center;font-size:3.2rem;
+    background:color-mix(in srgb,var(--accent) 14%,#eef2ed)}
+  .badges{position:absolute;top:8px;inset-inline-end:8px;display:flex;gap:5px;pointer-events:none}
+  .badge{background:rgba(0,0,0,.72);color:#fff;font-weight:800;font-size:.72rem;border-radius:999px;padding:3px 9px;font-variant-numeric:tabular-nums}
+  .badge.rt{color:#ffcf5a}
+
+  .body{padding:13px 15px;display:flex;flex-direction:column;gap:8px;flex:1}
   .chips{display:flex;gap:6px;flex-wrap:wrap}
   .chip{font-size:.68rem;font-weight:700;border-radius:999px;padding:2px 8px;background:color-mix(in srgb,var(--accent) 12%,#fff);color:var(--accent)}
-  .card h3{font-size:1.05rem;margin:0;text-wrap:balance}
-  .desc{font-size:.87rem;color:#33443b;margin:0}
-  .tip{font-size:.82rem;color:#4a5a50;background:#f5f8f4;border-inline-start:3px solid var(--accent);
+  .card h3{font-size:1.08rem;margin:0;text-wrap:balance}
+  .facets{display:flex;flex-direction:column;gap:5px;margin:2px 0}
+  .facet{font-size:.85rem;color:#33443b}
+  .facet b{color:var(--accent);font-weight:750}
+  .tip{font-size:.81rem;color:#4a5a50;background:#f5f8f4;border-inline-start:3px solid var(--accent);
     border-radius:0 8px 8px 0;padding:7px 10px;margin:2px 0 0}
-  .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:6px}
+  .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:8px}
   .acts a{text-decoration:none;font-size:.78rem;font-weight:700;border-radius:8px;padding:7px 11px;border:1px solid var(--line);color:inherit}
   .acts a.map{color:#fff;background:var(--accent);border-color:var(--accent)}
   .acts a.site{background:var(--ground)}
+
+  /* lightbox */
+  .lb{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:100;display:none;
+    align-items:center;justify-content:center;flex-direction:column;padding:20px}
+  .lb.open{display:flex}
+  .lb img{max-width:100%;max-height:86vh;object-fit:contain;border-radius:8px}
+  .lb .cap{color:#ddd;font-size:.75rem;margin-top:10px;text-align:center}
+  .lb .x{position:absolute;top:14px;inset-inline-end:16px;color:#fff;font-size:1.8rem;cursor:pointer;line-height:1}
   footer{color:var(--muted);font-size:.78rem;text-align:center;padding:26px 0;line-height:1.7}
 </style>
 </head>
@@ -70,145 +84,198 @@
   <header>
     <div class="eyebrow">מדריך אטרקציות · טרנסילבניה</div>
     <h1>🧭 טיול רומניה — כל האתרים</h1>
-    <p>16–27.8.2026 · מידע תמציתי, דירוגים, טיפים ישראליים ותמונות</p>
+    <p>16–27.8.2026 · תמונות, מה רואים · מה חווים · למי מתאים · דירוגים וטיפים</p>
     <div class="toplinks"><a href="map.html">🗺️ למפה האינטראקטיבית + ביקורות</a></div>
   </header>
 </div>
-
 <div class="filters"><div class="wrap" id="filters"></div></div>
 <div class="wrap" id="content"></div>
 <div class="wrap"><footer>
-  דירוגים מ-Google/TripAdvisor · טיפים ממקורות ישראליים · תמונות מ-Wikimedia Commons (ראה קרדיט על כל תמונה)<br>
+  תמונות מ-Wikimedia Commons (קרדיט על כל תמונה) · דירוגים מ-Google/TripAdvisor · טיפים ממקורות ישראליים<br>
   מחירים ושעות — לאמת באתרים לפני הביקור · טיול רומניה אוגוסט 2026
 </footer></div>
+<div class="lb" id="lb"><span class="x">✕</span><img id="lbimg" alt=""><div class="cap" id="lbcap"></div></div>
 
 <script>
-const AREAS = {
-  "פגאראש":{c:"#2f6d4f",t:"פגאראש / סיביו"},
-  "בראשוב":{c:"#2b6079",t:"בראשוב וסביבתה"},
-  "בוקרשט":{c:"#b07514",t:"בוקרשט וסביבתה"}
-};
+const AREAS={"פגאראש":{c:"#2f6d4f",t:"פגאראש / סיביו"},"בראשוב":{c:"#2b6079",t:"בראשוב וסביבתה"},"בוקרשט":{c:"#b07514",t:"בוקרשט וסביבתה"}};
 
-// img = שם הקובץ ב-Wikimedia Commons ("" אם אין). cr = קרדיט.
-const A = [
+const A=[
  {ic:"⛰️",name:"טרנספגאראשן + אגם באלאה",area:"פגאראש",cat:"טבע",rt:"4.6",lat:45.602000,lng:24.617000,site:"",
-  desc:"כביש הררי מפותל ~90 ק\"מ עם סרפנטינות ומפלים, מסתיים באגם קרחוני ב-2,034 מ'.",
+  see:"סרפנטינות אינסופיות, מפלים, ואגם קרחוני צלול ב-2,034 מ' מוקף פסגות פגאראש.",
+  exp:"נסיעת נוף מהיפות בעולם, אוויר הררי קר, עצירות צילום והקפת האגם.",
+  who:"כל המשפחה (הקטנים בעגלה/כתפיים בקטעים) · חובבי נופים ונהיגה.",
   tip:"חצי יום עד יום מלא, מהירות מקס' 40 קמ\"ש. בוקר אמצע-שבוע — הכי פחות עמוס.",
-  img:"Transfagarasan_Road_(Unsplash).jpg",cr:"Livin4wheel/Unsplash · CC0"},
+  imgs:[{f:"Transfagarasan_-_Balea_lake_(2500949373).jpg",c:"Cristian Bortes/CC BY 2.0"},{f:"RO_B_Transfagarasan_view_towards_the_north_from_Balea_Lake_1.jpg",c:"Andrei Stroe/CC BY-SA 3.0"},{f:"Transfagarasan_road_with_Bilea_Lake.jpg",c:"BáthoryPéter/CC BY-SA 4.0"}]},
  {ic:"🚡",name:"רכבל באלאה",area:"פגאראש",cat:"טבע",rt:"4.5",lat:45.636520,lng:24.606884,site:"https://muntii-fagaras.ro/en/cablecar",
-  desc:"רכבל ממפל באלאה אל האגם — הדרך הנוחה לראות את הנוף, ובחורף היחידה.",
+  see:"מבט-על על הצוקים, על הכביש המתפתל ועל האגם מלמעלה.",
+  exp:"עלייה תלולה ומרגשת מעל התהום, קרירות פסגה תוך דקות.",
+  who:"כולם — פתרון נוח למי שלא נוהג/הולך; מרשים לילדים.",
   tip:"תורים בעונה — להגיע מוקדם. מבוגר 120 / ילד 60 ליי הלוך-חזור.",
-  img:"Telecabina_Bâlea_Lac_–_Bâlea_Cascadă.jpg",cr:"Țetcu Mircea Rareș · CC BY-SA 4.0"},
+  imgs:[{f:"Telecabina_Bâlea_Lac_–_Bâlea_Cascadă.jpg",c:"Țetcu Mircea Rareș/CC BY-SA 4.0"}]},
  {ic:"🎢",name:"פארק הרפתקאות Drăguș",area:"פגאראש",cat:"אקסטרים",rt:"4.3",lat:45.694391,lng:24.778457,site:"https://www.aventura-dragus.ro/en/",
-  desc:"פארק חבלים מדורג לכל הגילאים: מסלולים בין העצים, זיפליין, קיר טיפוס, מסלול טרולים לילדים מגיל ~4.",
-  tip:"להגיע לפני הפתיחה (תור קטן). ~90 ליי מבוגר / 80 ילד / 45 פעוט.",img:"",cr:""},
+  see:"יער עם עשרות מסלולי חבלים, גשרים תלויים וזיפליינים מעל אגם.",
+  exp:"טיפוס, מעברים בגובה והחלקה על אומגה — לפי דרגות קושי בצבעים.",
+  who:"כל הגילאים מגיל ~4 (מסלול טרולים לקטנים) · מושלם למשפחה עם טווח גילאים רחב.",
+  tip:"להגיע לפני הפתיחה (תור קטן). ~90 ליי מבוגר / 80 ילד / 45 פעוט.",imgs:[]},
  {ic:"⛪",name:"מנזר סמבטה (Brâncoveanu)",area:"פגאראש",cat:"תרבות",rt:"4.6",lat:45.690100,lng:24.794700,site:"https://www.manastireabrancoveanu.ro/",
-  desc:"מנזר אורתודוקסי מרהיב בסגנון בראנקוביאני, גנים מטופחים ונוף הרים. ~שעה.",
-  tip:"עצירה שקטה ~1 ק\"מ מפארק דרגוש — לשלב באותו יום.",
-  img:"Brancoveanu_Monastery,_Sambata_de_Sus_-_Sep_2018_-_01.jpg",cr:"Codrin.B · CC BY-SA 4.0"},
+  see:"מנזר לבן מעוטר, מרפסת שיש מגולפת, גנים מטופחים ובריכות על רקע ההרים.",
+  exp:"שקט, אווירה רוחנית וטיול נעים בחצרות.",
+  who:"כולם · עצירה רגועה ומנוגדת לימי האקשן.",
+  tip:"~1 ק\"מ מפארק דרגוש — לשלב באותו יום.",
+  imgs:[{f:"Manastirea_Constantin_Brancoveanu,_Sambata_de_Sus.jpg",c:"Luminita/CC BY-SA 2.0"},{f:"Pridvorul_de_marmura,_Manastirea_Brancoveanu.jpg",c:"Luminita/CC BY-SA 2.0"},{f:"Manastirea_Sambata_5.JPG",c:"Planck/PD"}]},
  {ic:"🏰",name:"מבצר פגאראש",area:"פגאראש",cat:"טירות",rt:"4.7",lat:45.845278,lng:24.973611,site:"https://www.cetateafagarasului.com/",
-  desc:"מצודה מהמאה ה-14 מוקפת חפיר מים, עם מוזיאון (נשק, ארכיאולוגיה, בית סוהר קומוניסטי). ~שעה-שעה וחצי.",
+  see:"מצודה מהמאה ה-14 המשתקפת בחפיר המים, מגדלים, דונז'ון ומוזיאון נשק.",
+  exp:"מעבר גשרים אל תוך המצודה, הליכה על החומות וסיפורי היסטוריה (כולל בית סוהר קומוניסטי).",
+  who:"חובבי היסטוריה/טירות · ילדים גדולים · ~שעה-שעה וחצי.",
   tip:"\"אחת המצודות הגדולות והחשובות בטרנסילבניה, מוקפת מים.\" — רומניה שלי",
-  img:"Cetatea_Făgăraș_reflectată_în_șanțul_cu_apă.jpg",cr:"Aiciastat · CC BY-SA 4.0"},
+  imgs:[{f:"Cetatea_Fagarasului_-_Lacul_din_fata_cetatii.jpg",c:"Bogdan Toma/CC BY-SA 4.0"},{f:"Cetatea_Fagarasului_-_intrarea.jpg",c:"Bogdan Toma/CC BY-SA 4.0"},{f:"Cetatea_Fagarasului_-_Donjon.jpg",c:"Bogdan Toma/CC BY-SA 4.0"}]},
  {ic:"🏘️",name:"מוזיאון ASTRA (סיביו)",area:"פגאראש",cat:"משפחתי",rt:"4.8",lat:45.755186,lng:24.116125,site:"https://www.muzeulastra.com/",
-  desc:"מוזיאון פתוח ענק ביער: ~400 מבנים מקוריים, טחנות, חיות, מגרשי משחק ואגם. 3+ שעות.",
-  tip:"\"מקום מקסים ונעים שכיף לבלות בו.\" קו אוטובוס 13 מהעיר. — למטייל / בן הררי",
-  img:"Sibiu_Muzeul_in_aer_liber_ASTRA_(2).JPG",cr:"Andrei kokelburg · CC BY-SA 3.0"},
+  see:"400+ בתי כפר מקוריים, טחנות רוח ומים, כנסיות עץ, אגם ובעלי חיים — כפר רומני שלם.",
+  exp:"הליכה נינוחה ביער, הדגמות מלאכה, שיט קטן ומגרשי משחק.",
+  who:"כל המשפחה, במיוחד הקטנים · מרחב ענק, חצי יום.",
+  tip:"\"מקום מקסים שכיף לבלות בו.\" קו אוטובוס 13 מהעיר. — למטייל / בן הררי",
+  imgs:[{f:"Windmills_across_Lake_Dumbrava,_ASTRA_open-air_museum,_Sibiu,_2017.jpg",c:"DimiTalen/CC0"},{f:"Rasinari_astra.JPG",c:"Petre Rodan/CC BY-SA 3.0"},{f:"Cerbia_astra.JPG",c:"Petre Rodan/CC BY-SA 3.0"}]},
  {ic:"🦁",name:"גן חיות סיביו",area:"פגאראש",cat:"חיות",rt:"4.3",lat:45.762466,lng:24.123596,site:"https://www.zoosibiu.ro/",
-  desc:"גן החיות הוותיק ברומניה, ביער דומבראבה ליד אגם. אפשר להשכיר סירה. 2–3 שעות.",
-  tip:"זול מאוד (מבוגר 20 / ילד 10 ליי). מסויג: חלק מהכלובים קטנים.",
-  img:"Hermannstadt_(Sibiu)-Zoo-Lac_pasari_de_balta-01ASD.jpg",cr:"Asurnipal · CC BY-SA 4.0"},
+  see:"אריות, אמו, עופות מים וחיות נוספות ביער דומבראבה ליד אגם.",
+  exp:"טיול קליל ביער ואפשרות שיט על האגם עם הילדים.",
+  who:"משפחות עם ילדים קטנים · זול ומהיר (2–3 שעות).",
+  tip:"מבוגר 20 / ילד 10 ליי. מסויג: חלק מהכלובים קטנים.",
+  imgs:[{f:"Hermannstadt_(Sibiu)-Zoo-tired_lions-01ASD.jpg",c:"Asurnipal/CC BY-SA 4.0"},{f:"Hermannstadt_(Sibiu)-Zoo-Emu_(dromaius_novaehollandiae)-01ASD.jpg",c:"Asurnipal/CC BY-SA 4.0"},{f:"Hermannstadt_(Sibiu)-Zoo-Lac_pasari_de_balta-02ASD.jpg",c:"Asurnipal/CC BY-SA 4.0"}]},
  {ic:"🏛️",name:"סיביו העיר העתיקה",area:"פגאראש",cat:"תרבות",rt:"4.6",lat:45.796621,lng:24.151758,site:"",
-  desc:"הכיכר הגדולה (מורשת אונסק\"ו), \"גשר השקרים\", ארמון ברוקנטל וגגות \"דמויי עיניים\".",
+  see:"הכיכר הגדולה (אונסק\"ו), בתי בארוק צבעוניים, \"גשר השקרים\" וגגות עם חלונות \"דמויי עיניים\".",
+  exp:"שיטוט בסמטאות, בתי קפה, גלידה ואווירה אירופאית מלוטשת.",
+  who:"כולם · שילוב מושלם עם ASTRA באותו יום.",
   tip:"\"סיבוב בכיכר, מדרחוב Bălcescu, וקפה בכיכר.\" — רומניה שלי",
-  img:"2023_Piata_Mare_din_Sibiu.jpg",cr:"Chainwit. · CC BY 4.0"},
+  imgs:[{f:"2023_Piata_Mare_din_Sibiu.jpg",c:"Chainwit./CC BY 4.0"},{f:"ROM_Sibiu_Piata_Mare_09.jpg",c:"-wuppertaler/CC BY-SA 4.0"},{f:"Sibiu_Piata_Mare_ombres.jpg",c:"Mg far/CC BY-SA 3.0"}]},
  {ic:"🧂",name:"אגמי מלח Ocna Sibiului",area:"פגאראש",cat:"מים",rt:"4.2",lat:45.876953,lng:24.063323,site:"",
-  desc:"מספר אגמי מלח ובוץ מרפא, ~17 ק\"מ מסיביו. צפים כמו בים המלח אך רגוע יותר.",
+  see:"מספר אגמי מלח ירקרקים ובריכות בוץ, ~17 ק\"מ מסיביו.",
+  exp:"ציפה במים מלוחים כמו בים המלח, מריחת בוץ מרפא ושיזוף רגוע.",
+  who:"כל המשפחה · יום מים חם ונינוח (לא לשחייה אינטנסיבית).",
   tip:"\"אפשר להיות בהם שעות.\" להגיע מוקדם לכיסאות; להתקלח אחרי הבוץ. — TRVBOX",
-  img:"Ocna_Sibiului,_la_nămol1.JPG",cr:"Martin Greslou · CC0"},
+  imgs:[{f:"Romanian_salt_lake_located_in_Ocna_Sibiului_known_as_the_bottless_lake.jpg",c:"Brittany Adams/PD"},{f:"Ocna_Sibiului_lacurile_restau1.JPG",c:"Martin Greslou/CC0"},{f:"Ocna_Sibiului_jud_Sibiu.jpg",c:"Asybaris01/PD"}]},
  {ic:"🏰",name:"טירת פלש (סינאיה)",area:"פגאראש",cat:"טירות",rt:"4.6",lat:45.359840,lng:25.542650,site:"https://peles-castle.ro/peles-castle/",
-  desc:"ארמון ניאו-רנסנס מפואר, מעון הקיץ של קרול I, ~160 חדרים. סיור מודרך בלבד.",
+  see:"ארמון ניאו-רנסנס מפואר, ~160 חדרים מעוצבים, חדר נשק, עץ מגולף ונוף הרי בוצ'ג'י.",
+  exp:"סיור מודרך בפאר מלכותי מסחרר, וחזית אגדית לצילום.",
+  who:"חובבי ארמונות/היסטוריה · ילדים אוהבים את חדר הנשק (סיור מודרך, פחות לפעוטות).",
   tip:"נפתח 11:00 (לא 09:00), סגור ב'+ג'. \"הילדים התלהבו מחדר כלי הלחימה.\" — TripAdvisor",
-  img:"Peleș_Castle.jpg",cr:"Ciprian.lazar · CC BY-SA 4.0"},
+  imgs:[{f:"Peles_Castle_-_Sinaia_-_Romania_01.jpg",c:"Adam Jones/CC BY-SA 3.0"},{f:"Peles_Castle_Interior_-_Italian_Room.jpg",c:"CC BY-SA 4.0"},{f:"Peles_Castle_Interior_-_Royal_Dining_Room_(1).jpg",c:"CC BY-SA 4.0"},{f:"Peles_Castle_-_Sinaia_-_Romania_02.jpg",c:"Adam Jones/CC BY-SA 3.0"}]},
 
  {ic:"🧛",name:"טירת בראן (דרקולה)",area:"בראשוב",cat:"טירות",rt:"4.3",lat:45.514930,lng:25.367160,site:"https://www.bran-castle.com/en/",
-  desc:"הטירה המפורסמת שלמרגלות הקרפטים, המזוהה עם דרקולה. חדרים היסטוריים ו\"מנהרת זמן\". ~2–3 שעות.",
+  see:"טירה דרמטית על צוק, חדרים היסטוריים, חצר פנימית ומדרגות סתר.",
+  exp:"אווירת \"דרקולה\" ומיתוסים, \"מנהרת זמן\" אינטראקטיבית ודוכני שוק למרגלות.",
+  who:"כל המשפחה · מיתוסים מסקרנים לילדים גדולים.",
   tip:"\"מנהרת הזמן מומלצת מאוד.\" צפוף בעונה — כרטיסים אונליין. — למטייל",
-  img:"1_Castelul_Bran_2018.jpg",cr:"Sefulretelei · CC BY-SA 4.0"},
+  imgs:[{f:"Bran_Castle_(Dracula's_Castle).jpg",c:"Cristian Bortes/CC BY 2.0"},{f:"Bran_Castle_-_courtyard.jpg",c:"Yair-haklai/CC BY-SA 4.0"},{f:"Bran_Castle,_interior.jpg",c:"Yair-haklai/CC BY-SA 4.0"}]},
  {ic:"🏰",name:"מבצר רשנוב",area:"בראשוב",cat:"טירות",rt:"4.0",lat:45.590590,lng:25.469310,site:"",
-  desc:"מבצר איכרים מהמאה ה-13 על גבעה, הגדול בטרנסילבניה, עם נוף פנורמי.",
-  tip:"\"נוף עוצר נשימה. עולים בעגלת טרקטור (5 ליי).\" — למטייל",
-  img:"Rasnov_Citadel.jpg",cr:"Geaniw · CC BY-SA 4.0"},
+  see:"מבצר איכרים מהמאה ה-13 על גבעה, חצר, בארות ונוף פנורמי על העמק.",
+  exp:"עלייה בעגלת טרקטור או ברגל, תצפית ותחושת ימי-ביניים.",
+  who:"כולם · לשלב עם Dino Parc הסמוך.",
+  tip:"\"נוף עוצר נשימה. עולים בעגלה רתומה לטרקטור (5 ליי).\" — למטייל",
+  imgs:[{f:"Râşnov_Citadel_(Rosenauer_Burg)_01.jpg",c:"Pudelek/CC BY-SA 4.0"},{f:"Cetatea_Rasnov_Interior.jpg",c:"Radueduard/CC BY-SA 3.0"},{f:"CurteaCetatii.JPG",c:"Treteen/CC BY 3.0"}]},
  {ic:"🦕",name:"Dino Parc Râșnov",area:"בראשוב",cat:"משפחתי",rt:"🏆",lat:45.591340,lng:25.474150,site:"https://dinoparc.ro/en/",
-  desc:"גן דינוזאורים גדול: 120+ דגמים בגודל טבעי, מגרשי משחק, מבוך לייזר וקולנוע. צמוד לרשנוב.",
-  tip:"פארק השעשועים #1 ברומניה (TripAdvisor). היט לילדים — חצי יום עם רשנוב.",img:"",cr:""},
+  see:"120+ דגמי דינוזאורים בגודל טבעי פזורים ביער, כולל שלד ענק.",
+  exp:"שביל דינוזאורים, מגרשי משחק, מבוך לייזר, קולנוע ואומגה.",
+  who:"היט לילדים קטנים · כיף גם לגדולים. חצי יום עם רשנוב.",
+  tip:"פארק השעשועים #1 ברומניה (TripAdvisor). צמוד למבצר רשנוב.",imgs:[]},
  {ic:"🎢",name:"Parc Aventura Brașov",area:"בראשוב",cat:"אקסטרים",rt:"4.7",lat:45.612414,lng:25.636275,site:"https://www.parc-aventura.ro/",
-  desc:"פארק החבלים הגדול ברומניה ביער ליד אגם Noua: 8 מסלולים מדורגים, זיפליין מעל האגם. מגיל 4.",
-  tip:"מקום אחד לכל הגילאים — לא צריך לפצל את המשפחה.",img:"",cr:""},
+  see:"יער עם 8 מסלולי חבלים בדרגות קושי וזיפליין מעל אגם Noua.",
+  exp:"טיפוס, אומגות ואתגרים בגובה — כל אחד ברמה שלו.",
+  who:"כל הגילאים מגיל 4 · מקום אחד לכל המשפחה, בלי לפצל.",
+  tip:"קרוב לגן החיות של בראשוב — אפשר לשלב יום שלם.",imgs:[]},
  {ic:"🚡",name:"גונדולה Poiana (Postăvarul)",area:"בראשוב",cat:"טבע",rt:"",lat:45.588020,lng:25.552799,site:"https://www.discoverpoiana.ro/ro/instalatii",
-  desc:"גונדולה מהירה מ-Poiana Brașov לפסגת Postăvarul (~1,799 מ'), נוף אלפי. אפשר לרדת ברגל.",
-  tip:"~50 ליי הלוך-חזור. לשלב עם פעילויות ההרפתקה בפויאנה.",
-  img:"Lacul_Miorița,_Poiana_Brașov_-_panoramio.jpg",cr:"Andrei Dan Suciu · CC BY 3.0"},
+  see:"נוף אלפיני, יערות מחטניים ופסגת Postăvarul (~1,799 מ').",
+  exp:"עליית גונדולה מהירה, אוויר הרים ומסלולי הליכה/פעילויות באתר הנופש.",
+  who:"כולם · בסיס לפעילויות הרפתקה בפויאנה.",
+  tip:"~50 ליי הלוך-חזור. אפשר לעלות ולרדת ברגל.",
+  imgs:[{f:"Panoramica_Poiana_Brasov.jpg",c:"Fu-Rai/CC BY 2.0"},{f:"Postăvarul_Massif_(Schuler),_Romania_(50759813202).jpg",c:"xulescu_g/CC BY-SA 2.0"},{f:"RO_BV_Postavarul_1.jpg",c:"Nicu Farcaș/CC BY-SA 3.0"}]},
  {ic:"🐻",name:"שמורת דובים Libearty",area:"בראשוב",cat:"חיות",rt:"4.7",lat:45.594816,lng:25.379514,site:"https://millionsoffriends.org/en/libearty/",
-  desc:"שמורת הדובים החומים הגדולה בעולם — דובים שניצלו ממסעדות וקרקסים. סיור מודרך בלבד.",
+  see:"עשרות דובים חומים שניצלו ממסעדות, קרקסים ומלונות — בשטח יער מגודר ענק.",
+  exp:"סיור מודרך מרגש וחינוכי, סיפורי הצלה, ודובים קרובים לגדר בשעת ההאכלה.",
+  who:"כל המשפחה (מגיל 5+) · אוהבי חיות.",
   tip:"סגור יום שני! להגיע לסיור 10:00 (שעת האכלה). הזמנה מראש. — hakolal",
-  img:"Libearty_Bear_Sanctuary_1230786.jpg",cr:"Flominator · CC BY-SA 4.0"},
+  imgs:[{f:"Bear_climbing_a_tree_in_Libearty_Bear_Sanctuary_(32147519364).jpg",c:"Nicolas Vollmer/CC BY 2.0"},{f:"Libearty_Bear_Sanctuary_entrance,_Zărnești,_2017.jpg",c:"DimiTalen/CC0"},{f:"Libearty_Bear_Sanctuary_1230801.jpg",c:"Flominator/CC BY-SA 4.0"}]},
  {ic:"🥾",name:"ערוץ זרנשט",area:"בראשוב",cat:"טבע",rt:"4.7",lat:45.535817,lng:25.292071,site:"",
-  desc:"הליכה קלילה בקניון ~2 ק\"מ בין קירות מצוק עד ~200 מ'. ~40 דק' מבראשוב.",
+  see:"קניון צר בין קירות סלע תלולים עד ~200 מ', עם צמחייה ורקע פיאטרה קריולוי.",
+  exp:"הליכה קלילה ומוצלת בתוך הנקיק, קרירות וטבע פראי.",
+  who:"כולם כולל ילדים קטנים (מתקדמים לפי כוח) · מעולה ביום חם.",
   tip:"\"מתאים גם לילדים קטנים — מתקדמים לפי הכושר.\" — העולם / ממליגה",
-  img:"Prapastiile_Zarnestilor.jpg",cr:"Petr Vodička · CC BY-SA 4.0"},
+  imgs:[{f:"Prapastiile_Zarnestilor.jpg",c:"Petr Vodička/CC BY-SA 4.0"},{f:"Prapastiile_Zarnestilor_2.jpg",c:"Xulescu g/CC BY-SA 4.0"},{f:"Prapastiile_Zarnestilor_3.jpg",c:"Xulescu g/CC BY-SA 4.0"}]},
  {ic:"🚡",name:"רכבל Tâmpa",area:"בראשוב",cat:"טבע",rt:"3.5",lat:45.639538,lng:25.593355,site:"",
-  desc:"רכבל מהעיר העתיקה לפסגת Tâmpa (640→960 מ'), נוף פנורמי + שלט \"BRAȘOV\" הענק.",
+  see:"פנורמה על הגגות האדומים של בראשוב ועל שלט \"BRAȘOV\" הענק בהוליווד-סטייל.",
+  exp:"עליית רכבל קצרה לפסגה, תצפית וסלפי ליד השלט.",
+  who:"כולם · חוויית נוף מהירה (~2 דק' עלייה).",
   tip:"~45 ליי הלוך-חזור. תשתית מעטה למעלה — בעיקר לנוף.",
-  img:"RO_BV_Tampa_from_Old_Town.jpg",cr:"Whitepixels · CC0"},
+  imgs:[{f:"RO_BV_Tampa_from_Old_Town.jpg",c:"Whitepixels/CC0"},{f:"Brasov_hollywood_sign.jpg",c:"Husky/CC BY 3.0"},{f:"RO_BV_Tampa_cable_car_station.jpg",c:"Whitepixels/CC0"}]},
  {ic:"🏛️",name:"בראשוב העיר העתיקה",area:"בראשוב",cat:"תרבות",rt:"",lat:45.642000,lng:25.589000,site:"",
-  desc:"כיכר Sfatului — לב העיר, בתים מהמאה 18–19, בית המועצה מ-1420, הכנסייה השחורה, Strada Sforii.",
-  tip:"\"מומלץ סיור ערב כשהכיכר מוארת.\" אידאלי לשבת רגלית. — brasov.org.il",
-  img:"Piața_Sfatului,_Brașov.jpg",cr:"Yair-haklai · CC BY-SA 4.0"},
+  see:"כיכר Sfatului, הכנסייה השחורה, בית המועצה מ-1420, הרחוב הצר Strada Sforii וחומות.",
+  exp:"שיטוט וגלידה בכיכר, אווירת ערב מוארת — טיול רגלי נעים.",
+  who:"כולם · אידאלי לשבת (הכול במרחק הליכה).",
+  tip:"\"מומלץ סיור ערב כשהכיכר מוארת.\" — brasov.org.il",
+  imgs:[{f:"Piața_Sfatului,_Brașov.jpg",c:"Yair-haklai/CC BY-SA 4.0"},{f:"Council_Square_(Piața_Sfatului)_(31175991505).jpg",c:"bdmundo.com/CC BY-SA 2.0"},{f:"The_Black_Church_(Biserica_Neagră),_Brasov_(45506094825).jpg",c:"Dimitris Kamaras/CC BY 2.0"}]},
  {ic:"🏎️",name:"קרטינג Prejmer",area:"בראשוב",cat:"קרטינג",rt:"4.7",lat:45.746070,lng:25.770130,site:"https://prejmer-raceway.com/",
-  desc:"מסלול קרטינג חוץ ~1.2 ק\"מ עם סיבובים טכניים, ~20 דק' מבראשוב.",
-  tip:"קרט כפול לילדים בליווי מבוגר. לתאם מראש בסופ\"ש. — brasov.org.il",
-  img:"Go-kart_on_a_race_track_(Unsplash).jpg",cr:"Goh Rhy Yan/Unsplash · CC0"},
+  see:"מסלול מרוצים חיצוני טכני באורך ~1.2 ק\"מ עם קארטים מקצועיים.",
+  exp:"אדרנלין, נהיגה מהירה בסיבובים ותחרות משפחתית.",
+  who:"נוער וגדולים · קטנים בקרט כפול בליווי מבוגר. ~20 דק' מבראשוב.",
+  tip:"לתאם מראש, במיוחד בסופ\"ש. — brasov.org.il",
+  imgs:[{f:"A_go-cart.jpg",c:"Sally V/CC BY-SA 4.0"},{f:"Go_Kart_Track_-_geograph.org.uk_-_2838822.jpg",c:"Peter Morgan/CC BY-SA 2.0"}]},
  {ic:"🦁",name:"גן חיות בראשוב",area:"בראשוב",cat:"חיות",rt:"",lat:45.614237,lng:25.633224,site:"https://zoobrasov.ro/en/",
-  desc:"~300 חיות ביער ליד אגם Noua, אזור ירוק ונעים, צמוד לפארק ההרפתקאות.",
-  tip:"נקי ומתוחזק (84% ממליצים). לשלב עם Parc Aventura באותו אזור.",
-  img:"BrasovZoo1.jpg",cr:"Whitepixels · CC0"},
+  see:"~300 חיות ביער ירוק ונעים ליד אגם Noua.",
+  exp:"טיול-הליכה מרגיע בטבע ומפגש חיות.",
+  who:"משפחות · לשלב עם Parc Aventura באותו אזור.",
+  tip:"נקי ומתוחזק (84% ממליצים).",
+  imgs:[{f:"BrasovZoo1.jpg",c:"Whitepixels/CC0"}]},
 
  {ic:"💧",name:"Therme București",area:"בוקרשט",cat:"מים",rt:"4.1",lat:44.605550,lng:26.085360,site:"https://therme.ro/",
-  desc:"מרכז המים/ספא הגדול באירופה: 10 בריכות, 16 מגלשות, בריכת גלים וגן בוטני. Galaxy לילדים.",
-  tip:"יום שלם, להגיע מוקדם באמצע השבוע. ילדים עד 14 באזור Galaxy בלבד. סיום מושלם לטיול.",
-  img:"ThermeBucuresti.jpg",cr:"Daniele Napolitano · CC BY-SA 4.0"},
+  see:"כיפות ענק עם דקלים, 10 בריכות, 16 מגלשות וגן בוטני טרופי.",
+  exp:"מגלשות אקסטרים, בריכת גלים, סאונות וזרמי מים — יום פינוק שלם.",
+  who:"כל המשפחה · ילדים ב-Galaxy, מבוגרים ב-Palm/Elysium. סיום מושלם לטיול.",
+  tip:"להגיע מוקדם באמצע השבוע. ילדים עד 14 באזור Galaxy בלבד.",
+  imgs:[{f:"ThermeBucuresti.jpg",c:"Daniele Napolitano/CC BY-SA 4.0"},{f:"Palms_in_Romanian_water_park_Therme_București_(47981469533).jpg",c:"dronepicr/CC BY 2.0"}]},
  {ic:"🧂",name:"מכרה מלח סלניק (Slănic)",area:"בוקרשט",cat:"משפחתי",rt:"4.1",lat:45.235560,lng:25.942500,site:"https://primariaslanic.ro/",
-  desc:"אחד ממכרות המלח הגדולים באירופה — אולם ענק (~70 מ' גובה), פסלי מלח ומגרש משחקים. ~שעה.",
-  tip:"קר בפנים (~12°, מעילים!). סגור ראשון; פתוח 09:00–15:00. בדרך מבראשוב.",
-  img:"Unirea_salt_mine.jpg",cr:"Beradrian · CC BY-SA 3.0"},
+  see:"אולם תת-קרקעי עצום (~70 מ' גובה), קירות מלח, פסלי מלח (דצ'בל) ואגם מלוח.",
+  exp:"ירידה למעמקים, אוויר מלח נקי, מגרשי משחק וספורט בתוך המכרה.",
+  who:"כל המשפחה · ייחודי ומרשים במיוחד. (קר ~12° — מעילים!)",
+  tip:"סגור ראשון; פתוח 09:00–15:00. בדרך מבראשוב (יום 10).",
+  imgs:[{f:"Slanic_Unirea_mine_entrance.jpg",c:"Andrei Stroe/CC BY 3.0"},{f:"Unirea_salt_mine.jpg",c:"Beradrian/CC BY-SA 3.0"},{f:"Unirea_salt_mine_Genesis_Hall_Decebal.jpg",c:"Beradrian/CC BY-SA 3.0"}]},
  {ic:"🏛️",name:"ארמון הפרלמנט",area:"בוקרשט",cat:"תרבות",rt:"4.2",lat:44.427500,lng:26.087500,site:"https://cic.cdep.ro/en/vizitare",
-  desc:"הבניין השני בגודלו בעולם (תקופת צ'אושסקו). סיור מודרך 45–60 דק' באולמות שיש ענקיים.",
-  tip:"חובה להזמין מראש + דרכון לבידוק. לא מוקד לילדים — אופציונלי. — למטייל",
-  img:"Bucharest-palace-of-parliament-may-2016-001.jpg",cr:"anisoboy · CC BY-SA 2.0"},
+  see:"הבניין השני בגודלו בעולם, אולמות שיש עצומים, נברשות ענק ושטיחים ארוגים.",
+  exp:"סיור מודרך בפאר מהתקופה הקומוניסטית ומרפסת עם נוף לשדרה.",
+  who:"מתעניינים בהיסטוריה/אדריכלות · פחות לילדים קטנים.",
+  tip:"חובה להזמין מראש + דרכון לבידוק. — למטייל",
+  imgs:[{f:"Palace_of_the_Parliament_in_Bucharest_(51878975552).jpg",c:"W.J.Gauthier/CC BY-SA 2.0"},{f:"In_The_Belly_Of_The_Beast,_Palace_of_the_Parliament_of_Romania_(8021000236).jpg",c:"Antony Stanley/CC BY-SA 2.0"},{f:"Bucharest-palace-of-parliament-may-2016-001.jpg",c:"anisoboy/CC BY-SA 2.0"}]},
  {ic:"🦖",name:"מוזיאון הטבע Antipa",area:"בוקרשט",cat:"משפחתי",rt:"4.5",lat:44.453100,lng:26.084600,site:"https://antipa.ro/",
-  desc:"מוזיאון טבע עם דיורמות אינטראקטיביות, דינוזאורים ומחלקת חרקים. ~שעתיים, ממוזג.",
-  tip:"\"הילדים יתרגשו מהתצוגות הגדולות.\" מוזיאון אינטראקטיבי, לא משעמם. — בוקרשט למטיילים",
-  img:"RO_B_Antipa_museum_1.jpg",cr:"Andrei Stroe · CC BY-SA 3.0"},
+  see:"שלדי דינוזאורים, דיורמות בעלי חיים, חרקים ענקיים ומאובנים.",
+  exp:"תצוגות אינטראקטיביות, אזורי מגע ולמידה משחקית.",
+  who:"משפחות עם ילדים · ~שעתיים, ממוזג. מהמוזיאונים המהנים ברומניה.",
+  tip:"\"הילדים יתרגשו מהתצוגות הגדולות.\" — בוקרשט למטיילים",
+  imgs:[{f:"Grigore_Antipa_National_Museum_of_Natural_History,_Romania,_Bucharest._Skeleton_of_a_prehistorical_dinosaurs.JPG",c:"Britchi Mirela/CC BY-SA 4.0"},{f:"Grigore_Antipa_National_Museum_of_Natural_History,_Romania,_Bucharest._Skeleton_of_a_prehistorical_dinosaurs._(2).JPG",c:"Britchi Mirela/CC BY-SA 4.0"},{f:"Bucharest_Nat_History_+_BRD.jpg",c:"Joe Mabel/CC BY-SA 3.0"}]},
  {ic:"🌀",name:"MINA (מוזיאון אימרסיבי)",area:"בוקרשט",cat:"תרבות",rt:"3.9",lat:44.479014,lng:26.117253,site:"https://www.minamuseum.com/",
-  desc:"המרחב האימרסיבי הגדול ברומניה: הקרנות 360°, אור וסאונד מגיבים + אזור אינטראקטיבי לילדים 3–9.",
-  tip:"\"לא מוזיאון — חוויה חושית מלאה.\" מופע ~שעה. — בוקרשט למטיילים",img:"",cr:""},
+  see:"אולם עם הקרנות ענק 360°, אור, צבע ותנועה על כל הקירות והרצפה.",
+  exp:"טבילה בעולם דיגיטלי מגיב + אזור אינטראקטיבי לילדים 3–9.",
+  who:"אוהבי חוויות ואמנות דיגיטלית · חוויה חושית, לא תצוגה.",
+  tip:"\"לא מוזיאון — חוויה חושית מלאה.\" מופע ~שעה. — בוקרשט למטיילים",imgs:[]},
  {ic:"🌳",name:"פארק Herăstrău",area:"בוקרשט",cat:"טבע",rt:"4.5",lat:44.478060,lng:26.081417,site:"",
-  desc:"הפארק הגדול בבוקרשט סביב אגם: שיט, אופניים, שבילים, מגרשי משחק ומוזיאון כפר בפתוח.",
-  tip:"\"הפנינה הירוקה של העיר.\" כניסה חופשית — שיט באגם מומלץ למשפחות.",
-  img:"Parque_Herastrau,_Bucarest,_Rumanía,_2016-05-30,_DD_10.jpg",cr:"Diego Delso · CC BY-SA 4.0"},
+  see:"אגם גדול, ירק, סירות ומוזיאון כפר בפתוח לאורך הגדה.",
+  exp:"שיט/פדלו, אופניים, פיקניק ומגרשי משחק.",
+  who:"כל המשפחה · הפסקה ירוקה חינמית בלב העיר.",
+  tip:"\"הפנינה הירוקה של העיר.\" שיט באגם מומלץ למשפחות.",
+  imgs:[{f:"Bărci_pe_Lacul_Herăstrău.jpg",c:"Nicolae Sfetcu/CC BY-SA 4.0"},{f:"Parcul_Herastrau_park_lake_Bucharest_Bucuresti_Romania.JPG",c:"Crislia/CC BY-SA 4.0"},{f:"Herastrau_park_leaves_(Unsplash).jpg",c:"Rula Sibai/CC0"}]},
  {ic:"🏎️",name:"קרטינג AMCKART",area:"בוקרשט",cat:"קרטינג",rt:"4.6",lat:44.536637,lng:26.150364,site:"https://www.amckart.ro/",
-  desc:"מסלול קרטינג חוץ מקצועי ~1.24 ק\"מ עם תאורת לילה. רכבים 6–9.5 כ\"ס.",
-  tip:"גובה מינ' ~120 ס\"מ — לילדים גדולים ונוער. לתאם מראש. ~50–70 ליי לנסיעה.",
-  img:"Go-kart_on_a_race_track_(Unsplash).jpg",cr:"Goh Rhy Yan/Unsplash · CC0"},
+  see:"מסלול קרטינג חיצוני מקצועי באורך ~1.24 ק\"מ עם תאורת לילה.",
+  exp:"אדרנלין, מרוץ ונהיגה מהירה — גם בשעות הערב.",
+  who:"נוער וגדולים (גובה 120 ס\"מ+).",
+  tip:"לתאם מראש. ~50–70 ליי לנסיעה (~10 דק').",
+  imgs:[{f:"A_go-cart.jpg",c:"Sally V/CC BY-SA 4.0"},{f:"Kart_track_-_geograph.org.uk_-_2741083.jpg",c:"N Chadwick/CC BY-SA 2.0"}]},
  {ic:"🦁",name:"גן חיות בוקרשט",area:"בוקרשט",cat:"חיות",rt:"3.2",lat:44.517400,lng:26.103900,site:"https://bucurestizoo.ro/en/",
-  desc:"גן חיות ביער בניאסה, 150+ מינים (טיגריסים, אריות, דובים, זברות). שטח גדול עם הליכה.",
-  tip:"\"נקי, בעלי החיים מטופלים.\" להגיע בבוקר. — יאללה בוקרשט",
-  img:"Zoo_Băneasa.jpg",cr:"Tiia Monto · CC BY-SA 4.0"}
+  see:"טיגריסים, אריות, דובים, זברות ובית זוחלים — בתוך יער בניאסה.",
+  exp:"טיול-הליכה בטבע עירוני ומפגש טורפים.",
+  who:"משפחות · עדיף בבוקר (חיות פעילות).",
+  tip:"\"נקי, בעלי החיים מטופלים.\" — יאללה בוקרשט",
+  imgs:[{f:"Bucharest_Zoo_3.jpg",c:"Tiia Monto/CC BY-SA 4.0"},{f:"Bucharest_Zoo_4.jpg",c:"Tiia Monto/CC BY-SA 4.0"},{f:"Zoo_Băneasa_entry.jpg",c:"Tiia Monto/CC BY-SA 4.0"}]}
 ];
 
 function esc(s){return (s||"").replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-function imgUrl(f){return "https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(f)+"?width=600";}
+function imgUrl(f,w){return "https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(f)+"?width="+w;}
 
 const content=document.getElementById('content');
 function render(filter){
@@ -216,8 +283,7 @@ function render(filter){
   Object.keys(AREAS).forEach(area=>{
     const items=A.filter(a=>a.area===area && (!filter||a.cat===filter));
     if(!items.length) return;
-    const sec=document.createElement('section');
-    sec.className='sec';
+    const sec=document.createElement('section'); sec.className='sec';
     sec.innerHTML=`<div class="sec-h"><span class="bar" style="background:${AREAS[area].c}"></span>
       <h2>${AREAS[area].t}</h2><small>${items.length} אתרים</small></div>
       <div class="grid">${items.map(card).join('')}</div>`;
@@ -227,16 +293,25 @@ function render(filter){
 function card(a){
   const c=AREAS[a.area].c;
   const mapUrl=`https://www.google.com/maps/search/?api=1&query=${a.lat},${a.lng}`;
-  const rt=a.rt?`<span class="rt">${a.rt==='🏆'?'🏆 #1':'★ '+a.rt}</span>`:'';
-  const pic=a.img
-    ? `<img src="${imgUrl(a.img)}" alt="${esc(a.name)}" loading="lazy" referrerpolicy="no-referrer">${a.cr?`<span class="cr">📷 ${esc(a.cr)}</span>`:''}`
-    : `<div class="noimg">${a.ic}</div>`;
-  return `<article class="card" style="--accent:${c}">
-    <div class="ph">${pic}${rt}</div>
+  const rt=a.rt?`<span class="badge rt">${a.rt==='🏆'?'🏆 #1':'★ '+a.rt}</span>`:'';
+  let head;
+  if(a.imgs && a.imgs.length){
+    const slides=a.imgs.map(im=>`<div class="slide"><img src="${imgUrl(im.f,600)}" alt="${esc(a.name)}" loading="lazy" referrerpolicy="no-referrer" data-full="${imgUrl(im.f,1400)}" data-cr="${esc(im.c)}"><span class="cr">📷 ${esc(im.c)}</span></div>`).join('');
+    const cnt=a.imgs.length>1?`<span class="badge">📷 ${a.imgs.length}</span>`:'';
+    head=`<div class="gal">${slides}</div><div class="badges">${cnt}${rt}</div>`;
+  }else{
+    head=`<div class="noimg">${a.ic}</div><div class="badges">${rt}</div>`;
+  }
+  return `<article class="card" style="--accent:${c};position:relative">
+    ${head}
     <div class="body">
       <div class="chips"><span class="chip">${a.ic} ${esc(a.cat)}</span></div>
       <h3>${esc(a.name)}</h3>
-      <p class="desc">${esc(a.desc)}</p>
+      <div class="facets">
+        <div class="facet"><b>👀 רואים:</b> ${esc(a.see)}</div>
+        <div class="facet"><b>✨ חווים:</b> ${esc(a.exp)}</div>
+        <div class="facet"><b>👨‍👩‍👧 מתאים ל:</b> ${esc(a.who)}</div>
+      </div>
       <p class="tip">💬 ${esc(a.tip)}</p>
       <div class="acts">
         <a class="map" href="${mapUrl}" target="_blank" rel="noopener">📍 גוגל מפות</a>
@@ -245,6 +320,18 @@ function card(a){
     </div>
   </article>`;
 }
+
+// lightbox
+const lb=document.getElementById('lb'),lbimg=document.getElementById('lbimg'),lbcap=document.getElementById('lbcap');
+document.addEventListener('click',e=>{
+  const im=e.target.closest('.slide img');
+  if(im){ lbimg.src=im.dataset.full; lbcap.textContent='📷 '+im.dataset.cr; lb.classList.add('open'); }
+});
+function closeLB(){ lb.classList.remove('open'); lbimg.src=''; }
+lb.addEventListener('click',closeLB);
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeLB(); });
+
+// filters
 const cats=['הכל',...Array.from(new Set(A.map(a=>a.cat)))];
 const fbar=document.getElementById('filters');
 fbar.innerHTML=cats.map((c,i)=>`<button data-cat="${c==='הכל'?'':c}" class="${i===0?'on':''}">${c}</button>`).join('');
