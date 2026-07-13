@@ -68,6 +68,47 @@
   .acts a{text-decoration:none;font-size:.78rem;font-weight:700;border-radius:8px;padding:7px 11px;border:1px solid var(--line);color:inherit}
   .acts a.map{color:#fff;background:var(--accent);border-color:var(--accent)}
   .acts a.site{background:var(--ground)}
+  .acts a.rev{background:color-mix(in srgb,var(--accent) 12%,#fff);color:var(--accent);border-color:transparent;cursor:pointer}
+
+  /* gallery nav */
+  .galwrap{position:relative}
+  .gal{direction:ltr}
+  .nav{position:absolute;top:50%;transform:translateY(-50%);z-index:3;background:rgba(0,0,0,.42);color:#fff;
+    border:none;width:32px;height:32px;border-radius:50%;font-size:1.25rem;line-height:1;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;padding:0}
+  .nav:hover{background:rgba(0,0,0,.65)}
+  .nav.left{left:8px}.nav.right{right:8px}
+  .dots{position:absolute;inset-block-end:7px;inset-inline:0;display:flex;gap:5px;justify-content:center;z-index:3;pointer-events:none}
+  .dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.55)}
+  .dot.on{background:#fff}
+
+  /* reviews modal */
+  .ov{position:fixed;inset:0;background:rgba(15,25,20,.5);z-index:90;display:none;align-items:flex-end;justify-content:center}
+  .ov.open{display:flex}
+  .sheet{background:var(--surface);width:100%;max-width:560px;max-height:88vh;border-radius:18px 18px 0 0;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+  @media(min-width:560px){.ov{align-items:center}.sheet{border-radius:18px;max-height:82vh}}
+  .sheet-h{display:flex;align-items:center;gap:10px;padding:15px 18px;border-bottom:1px solid var(--line)}
+  .sheet-h h2{font-size:1.05rem;margin:0;flex:1}
+  .sheet-h button{border:none;background:var(--ground);border-radius:8px;width:32px;height:32px;font-size:1.1rem;cursor:pointer;color:var(--muted)}
+  .sheet-body{overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+  .rev{border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:#fbfdfb}
+  .rev .top{display:flex;align-items:center;gap:8px;font-size:.85rem}
+  .rev .top .stars{color:var(--star);letter-spacing:1px}
+  .rev .top time{margin-inline-start:auto;font-size:.7rem;color:var(--muted)}
+  .rev p{margin:6px 0 0;font-size:.88rem;line-height:1.5}
+  .empty{color:var(--muted);text-align:center;padding:12px;font-size:.86rem}
+  form.addrev{display:flex;flex-direction:column;gap:9px;border-top:1px dashed var(--line);padding-top:14px}
+  form.addrev label{font-size:.75rem;font-weight:700;color:var(--muted)}
+  form.addrev input,form.addrev textarea{font-family:var(--sans);font-size:.92rem;padding:9px 11px;border:1px solid var(--line);border-radius:9px;width:100%;background:var(--surface)}
+  form.addrev textarea{resize:vertical;min-height:60px}
+  .starpick{display:flex;flex-direction:row-reverse;justify-content:flex-end;gap:3px;font-size:1.5rem}
+  .starpick input{display:none}
+  .starpick label{color:#d7ddd7;cursor:pointer}
+  .starpick label:hover,.starpick label:hover~label,.starpick input:checked~label{color:var(--star)}
+  form.addrev button{background:var(--fag);color:#fff;border:none;border-radius:10px;padding:11px;font-size:.95rem;font-weight:700;cursor:pointer;font-family:var(--sans)}
+  form.addrev button:disabled{opacity:.5}
+  .cfgwarn{background:#fdecea;border:1px solid #f5c6c0;border-radius:10px;padding:10px 12px;font-size:.8rem;color:#7a2820}
+  .revnote{background:#f5f8f4;border-radius:8px;padding:8px 10px;font-size:.78rem;color:var(--muted)}
 
   /* lightbox */
   .lb{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:100;display:none;
@@ -94,6 +135,7 @@
   תמונות מ-Wikimedia Commons (קרדיט על כל תמונה) · דירוגים מ-Google/TripAdvisor · טיפים ממקורות ישראליים<br>
   מחירים ושעות — לאמת באתרים לפני הביקור · טיול רומניה אוגוסט 2026
 </footer></div>
+<div class="ov" id="ov"><div class="sheet" role="dialog" aria-modal="true"><div class="sheet-h"><h2 id="ovTitle">תגובות</h2><button id="ovClose" aria-label="סגור">✕</button></div><div class="sheet-body" id="ovBody"></div></div></div>
 <div class="lb" id="lb"><span class="x">✕</span><img id="lbimg" alt=""><div class="cap" id="lbcap"></div></div>
 
 <script>
@@ -279,6 +321,7 @@ function imgUrl(f,w){return "https://commons.wikimedia.org/wiki/Special:FilePath
 
 const content=document.getElementById('content');
 function render(filter){
+  curFilter=filter;
   content.innerHTML='';
   Object.keys(AREAS).forEach(area=>{
     const items=A.filter(a=>a.area===area && (!filter||a.cat===filter));
@@ -289,19 +332,25 @@ function render(filter){
       <div class="grid">${items.map(card).join('')}</div>`;
     content.appendChild(sec);
   });
+  afterRender();
 }
 function card(a){
   const c=AREAS[a.area].c;
+  const id=NAME2ID[a.name]||'';
   const mapUrl=`https://www.google.com/maps/search/?api=1&query=${a.lat},${a.lng}`;
   const rt=a.rt?`<span class="badge rt">${a.rt==='🏆'?'🏆 #1':'★ '+a.rt}</span>`:'';
   let head;
   if(a.imgs && a.imgs.length){
     const slides=a.imgs.map(im=>`<div class="slide"><img src="${imgUrl(im.f,600)}" alt="${esc(a.name)}" loading="lazy" referrerpolicy="no-referrer" data-full="${imgUrl(im.f,1400)}" data-cr="${esc(im.c)}"><span class="cr">📷 ${esc(im.c)}</span></div>`).join('');
-    const cnt=a.imgs.length>1?`<span class="badge">📷 ${a.imgs.length}</span>`:'';
-    head=`<div class="gal">${slides}</div><div class="badges">${cnt}${rt}</div>`;
+    const multi=a.imgs.length>1;
+    const nav=multi?`<button class="nav left" aria-label="הקודם">‹</button><button class="nav right" aria-label="הבא">›</button>`:'';
+    const dots=multi?`<div class="dots">${a.imgs.map((_,i)=>`<span class="dot${i===0?' on':''}"></span>`).join('')}</div>`:'';
+    const cnt=multi?`<span class="badge">📷 ${a.imgs.length}</span>`:'';
+    head=`<div class="galwrap"><div class="gal">${slides}</div>${nav}${dots}<div class="badges">${cnt}${rt}</div></div>`;
   }else{
-    head=`<div class="noimg">${a.ic}</div><div class="badges">${rt}</div>`;
+    head=`<div class="galwrap"><div class="noimg">${a.ic}</div><div class="badges">${rt}</div></div>`;
   }
+  const st=reviewStats(id);
   return `<article class="card" style="--accent:${c};position:relative">
     ${head}
     <div class="body">
@@ -314,6 +363,7 @@ function card(a){
       </div>
       <p class="tip">💬 ${esc(a.tip)}</p>
       <div class="acts">
+        <a class="rev" data-rev="${id}">💬 תגובות (${st.count})</a>
         <a class="map" href="${mapUrl}" target="_blank" rel="noopener">📍 גוגל מפות</a>
         ${a.site?`<a class="site" href="${esc(a.site)}" target="_blank" rel="noopener">🌐 אתר</a>`:''}
       </div>
@@ -321,7 +371,81 @@ function card(a){
   </article>`;
 }
 
-// lightbox
+let curFilter='';
+
+// מיפוי שם-אתר ל-id (זהה למפה — כך התגובות משותפות בין המדריך למפה)
+const NAME2ID={
+ "טרנספגאראשן + אגם באלאה":"balea","רכבל באלאה":"telecabina","פארק הרפתקאות Drăguș":"dragus",
+ "מנזר סמבטה (Brâncoveanu)":"sambata","מבצר פגאראש":"fagaras","מוזיאון ASTRA (סיביו)":"astra",
+ "גן חיות סיביו":"zoosibiu","סיביו העיר העתיקה":"sibiu","אגמי מלח Ocna Sibiului":"ocna","טירת פלש (סינאיה)":"peles",
+ "טירת בראן (דרקולה)":"bran","מבצר רשנוב":"rasnov","Dino Parc Râșnov":"dino","Parc Aventura Brașov":"aventura",
+ "גונדולה Poiana (Postăvarul)":"postavaru","שמורת דובים Libearty":"libearty","ערוץ זרנשט":"zarnesti",
+ "רכבל Tâmpa":"tampa","בראשוב העיר העתיקה":"sfatului","קרטינג Prejmer":"prejmer","גן חיות בראשוב":"zoobrasov",
+ "Therme București":"therme","מכרה מלח סלניק (Slănic)":"slanic","ארמון הפרלמנט":"parliament",
+ "מוזיאון הטבע Antipa":"antipa","MINA (מוזיאון אימרסיבי)":"mina","פארק Herăstrău":"herastrau",
+ "קרטינג AMCKART":"amckart","גן חיות בוקרשט":"zoobuc"
+};
+
+// ---------- תגובות (Google Sheet, משותף עם המפה) ----------
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbwJBISpWWpkDL9U9RX9VLWFfVnF5fpElhEr5uK4coYhv8SX-tevo0R8uZI8jcTh7GxvXg/exec";
+const configured=SCRIPT_URL && !SCRIPT_URL.includes("PASTE_YOUR");
+let ALL_REVIEWS=[];
+function jsonp(url){return new Promise((res,rej)=>{const cb='cb_'+Math.floor(Math.random()*1e9);
+  window[cb]=d=>{res(d);cl();};const s=document.createElement('script');
+  s.src=url+(url.includes('?')?'&':'?')+'callback='+cb;s.onerror=()=>{rej(new Error('x'));cl();};
+  function cl(){delete window[cb];s.remove();}document.body.appendChild(s);});}
+async function loadReviews(){
+  if(configured){try{const d=await jsonp(SCRIPT_URL);ALL_REVIEWS=Array.isArray(d)?d:(d.reviews||[]);}catch(e){}}
+  render(curFilter);
+}
+function reviewsFor(id){return ALL_REVIEWS.filter(r=>r.poi===id);}
+function reviewStats(id){const l=reviewsFor(id);const n=l.map(r=>parseInt(r.rating)||0).filter(x=>x>0);
+  return{count:l.length,avg:n.length?n.reduce((a,b)=>a+b,0)/n.length:0};}
+function stars(n){n=Math.max(0,Math.min(5,parseInt(n)||0));return "★".repeat(n)+"☆".repeat(5-n);}
+
+const ov=document.getElementById('ov'),ovBody=document.getElementById('ovBody'),ovTitle=document.getElementById('ovTitle');
+document.getElementById('ovClose').onclick=()=>ov.classList.remove('open');
+ov.addEventListener('click',e=>{if(e.target===ov)ov.classList.remove('open');});
+async function openReviews(id){
+  const a=A.find(x=>NAME2ID[x.name]===id);
+  ovTitle.textContent=a?a.name:'תגובות';
+  ovBody.innerHTML='<div class="empty">טוען…</div>';
+  ov.classList.add('open');
+  await loadReviews();
+  renderRev(id);
+}
+function renderRev(id){
+  const list=reviewsFor(id);let h='';
+  if(!configured) h+='<div class="cfgwarn">⚠️ מערכת התגובות לא מחוברת.</div>';
+  h+= list.length
+    ? list.map(r=>`<div class="rev"><div class="top"><b>${esc(r.name||'אנונימי')}</b><span class="stars">${stars(r.rating)}</span><time>${esc((r.timestamp||'').slice(0,10))}</time></div><p>${esc(r.comment)}</p></div>`).join('')
+    : '<div class="empty">אין עדיין תגובות. היו הראשונים! 👇</div>';
+  const dis=configured?'':'disabled';
+  h+=`<form class="addrev" id="frm">
+    <label>השם שלך</label><input name="name" maxlength="40" placeholder="מי מגיב?" ${dis}>
+    <label>דירוג</label><div class="starpick">${[5,4,3,2,1].map(n=>`<input type="radio" name="rating" id="s${n}" value="${n}" ${dis}><label for="s${n}">★</label>`).join('')}</div>
+    <label>תגובה</label><textarea name="comment" maxlength="600" placeholder="מה חשבתם? טיפים? כדאי/לא כדאי?" ${dis}></textarea>
+    <button type="submit" ${dis}>שליחת תגובה</button>
+    ${configured?'<div class="revnote">התגובה תופיע לכל המשפחה — גם כאן וגם במפה.</div>':''}
+  </form>`;
+  ovBody.innerHTML=h;
+  const f=document.getElementById('frm');
+  if(f&&configured) f.onsubmit=async e=>{
+    e.preventDefault();const fd=new FormData(f);
+    const rev={poi:id,name:(fd.get('name')||'אנונימי').trim(),rating:fd.get('rating')||'',comment:(fd.get('comment')||'').trim()};
+    if(!rev.comment){alert('נא לכתוב תגובה');return;}
+    const btn=f.querySelector('button');btn.disabled=true;btn.textContent='שולח…';
+    try{
+      await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(rev)});
+      rev.timestamp=new Date().toISOString();ALL_REVIEWS.push(rev);renderRev(id);setTimeout(loadReviews,1500);
+    }catch(err){btn.disabled=false;btn.textContent='שליחת תגובה';alert('שגיאה בשליחה. נסו שוב.');}
+  };
+}
+
+// לחיצה על כפתור "תגובות" בכרטיס
+content.addEventListener('click',e=>{const b=e.target.closest('.rev[data-rev]');if(b){e.preventDefault();openReviews(b.dataset.rev);}});
+
+// ---------- lightbox ----------
 const lb=document.getElementById('lb'),lbimg=document.getElementById('lbimg'),lbcap=document.getElementById('lbcap');
 document.addEventListener('click',e=>{
   const im=e.target.closest('.slide img');
@@ -329,9 +453,23 @@ document.addEventListener('click',e=>{
 });
 function closeLB(){ lb.classList.remove('open'); lbimg.src=''; }
 lb.addEventListener('click',closeLB);
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeLB(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ closeLB(); ov.classList.remove('open'); } });
 
-// filters
+// ---------- ניווט גלריה (חיצים + נקודות) ----------
+function afterRender(){
+  content.querySelectorAll('.galwrap').forEach(gw=>{
+    const gal=gw.querySelector('.gal'); if(!gal) return;
+    const L=gw.querySelector('.nav.left'),R=gw.querySelector('.nav.right'),dots=gw.querySelectorAll('.dot');
+    if(L) L.onclick=()=>gal.scrollBy({left:-gal.clientWidth,behavior:'smooth'});
+    if(R) R.onclick=()=>gal.scrollBy({left:gal.clientWidth,behavior:'smooth'});
+    if(dots.length) gal.addEventListener('scroll',()=>{
+      const i=Math.round(gal.scrollLeft/gal.clientWidth);
+      dots.forEach((d,k)=>d.classList.toggle('on',k===i));
+    });
+  });
+}
+
+// ---------- filters ----------
 const cats=['הכל',...Array.from(new Set(A.map(a=>a.cat)))];
 const fbar=document.getElementById('filters');
 fbar.innerHTML=cats.map((c,i)=>`<button data-cat="${c==='הכל'?'':c}" class="${i===0?'on':''}">${c}</button>`).join('');
@@ -340,6 +478,7 @@ fbar.querySelectorAll('button').forEach(b=>b.onclick=()=>{
   b.classList.add('on'); render(b.dataset.cat);
 });
 render('');
+loadReviews();
 </script>
 </body>
 </html>
