@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>התוכנית · טיול רומניה 2026</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>">
+<style>
+  :root{
+    --ground:#f1f4f0; --surface:#fff; --ink:#15231c; --muted:#5b6a61; --line:#e0e6df;
+    --fag:#2f6d4f; --bra:#2b6079; --buc:#b07514; --shab:#5b5391; --star:#c99a2e;
+    --shadow:0 2px 10px rgba(20,40,30,.08);
+    --sans:system-ui,"Segoe UI",Roboto,"Noto Sans Hebrew",Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.6}
+  .wrap{max-width:820px;margin:0 auto;padding:0 16px}
+  a{color:inherit}
+
+  .topnav{position:sticky;top:0;z-index:10;background:rgba(241,244,240,.94);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);padding:9px 0}
+  .topnav .wrap{display:flex;gap:8px;justify-content:center}
+  .topnav a{text-decoration:none;font-size:.82rem;font-weight:700;background:var(--surface);border:1px solid var(--line);
+    border-radius:9px;padding:7px 13px;white-space:nowrap}
+  .topnav a.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  header{padding:26px 0 8px;text-align:center}
+  .eyebrow{font-size:.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--fag)}
+  header h1{font-size:1.9rem;margin:.25em 0 .1em;text-wrap:balance}
+  header p{color:var(--muted);margin:.2em 0;font-variant-numeric:tabular-nums}
+
+  .keyfacts{display:grid;gap:10px;grid-template-columns:1fr;margin:16px 0}
+  @media(min-width:620px){.keyfacts{grid-template-columns:1fr 1fr 1fr}}
+  .kf{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:13px 15px;box-shadow:var(--shadow);border-top:3px solid var(--accent)}
+  .kf h3{margin:0 0 6px;font-size:.78rem;letter-spacing:.5px;color:var(--muted);text-transform:uppercase}
+  .kf .big{font-size:1.05rem;font-weight:750;font-variant-numeric:tabular-nums}
+  .kf small{color:var(--muted);font-size:.8rem;display:block;font-variant-numeric:tabular-nums}
+
+  h2.sec{font-size:1.2rem;margin:26px 0 10px;display:flex;align-items:center;gap:9px}
+  h2.sec::before{content:"";width:30px;height:5px;border-radius:3px;background:var(--fag)}
+
+  .stay{display:grid;gap:8px}
+  .stay .row{display:flex;align-items:center;gap:11px;background:var(--surface);border:1px solid var(--line);
+    border-radius:12px;padding:11px 13px;box-shadow:var(--shadow)}
+  .dot{width:11px;height:11px;border-radius:50%;flex:0 0 auto}
+  .stay .row b{font-size:.95rem}
+  .stay .row .meta{margin-inline-start:auto;text-align:end;color:var(--muted);font-size:.8rem;font-variant-numeric:tabular-nums}
+
+  .days{display:grid;gap:9px}
+  .day{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:11px 14px;
+    box-shadow:var(--shadow);border-inline-start:4px solid var(--accent);display:flex;gap:12px;align-items:flex-start}
+  .day .num{flex:0 0 auto;text-align:center;min-width:52px}
+  .day .num b{display:block;font-size:.7rem;font-weight:800;color:var(--accent);letter-spacing:.5px}
+  .day .num span{font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums}
+  .day .txt{flex:1}
+  .day .txt h4{margin:0;font-size:.98rem}
+  .day .txt p{margin:2px 0 0;font-size:.85rem;color:#33443b}
+  .day.shab{--accent:var(--shab);background:linear-gradient(180deg,#f7f6fb,#fff)}
+  .tag{display:inline-block;font-size:.68rem;font-weight:700;border-radius:999px;padding:1px 8px;margin-inline-start:6px;
+    background:color-mix(in srgb,var(--accent) 13%,#fff);color:var(--accent);vertical-align:middle}
+
+  .box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px 17px;box-shadow:var(--shadow)}
+  ul.chk{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+  ul.chk li{display:flex;gap:9px;font-size:.9rem;align-items:flex-start}
+  ul.chk .i{flex:0 0 auto}
+  table.bud{width:100%;border-collapse:collapse;font-size:.9rem}
+  table.bud td{padding:7px 2px;border-bottom:1px solid #eef2ed;font-variant-numeric:tabular-nums}
+  table.bud td:last-child{text-align:start;font-weight:700;white-space:nowrap}
+  table.bud tr:last-child td{border-bottom:none;border-top:2px solid var(--line);font-size:1.02rem}
+  .warn{background:#fdf6ec;border:1px solid #f0dcbb;border-radius:10px;padding:9px 12px;font-size:.83rem;margin-top:9px}
+  footer{color:var(--muted);font-size:.78rem;text-align:center;padding:26px 0;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="topnav"><div class="wrap">
+  <a class="on" href="plan.html">📋 תוכנית</a>
+  <a href="index.html">🧭 מדריך</a>
+  <a href="map.html">🗺️ מפה</a>
+</div></div>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">התוכנית הסגורה · טרנסילבניה</div>
+    <h1>🇷🇴 טיול רומניה — אוגוסט 2026</h1>
+    <p>16–27.8.2026 · זוג + 6 ילדים (4·7·9·12·14·17) · ואן 9 מקומות</p>
+  </header>
+
+  <!-- עובדות מפתח -->
+  <div class="keyfacts">
+    <div class="kf" style="--accent:var(--buc)">
+      <h3>✈️ טיסות (Wizz Air)</h3>
+      <div class="big">הלוך · א׳ 16.8</div><small>TLV 16:25 → OTP 19:15 (W43264)</small>
+      <div class="big" style="margin-top:6px">חזור · ה׳ 27.8</div><small>OTP 05:45 → TLV 08:25</small>
+    </div>
+    <div class="kf" style="--accent:var(--fag)">
+      <h3>🚗 רכב (Sixt)</h3>
+      <div class="big">ואן 9 מקומות</div>
+      <small>איסוף 16.8 · 20:30 (OTP)</small>
+      <small>החזרה 27.8 · 04:00</small>
+      <small>ביטוח מלא · 2 בוסטרים</small>
+    </div>
+    <div class="kf" style="--accent:var(--bra)">
+      <h3>💰 תקציב משוער</h3>
+      <div class="big">~€9,600</div>
+      <small>≈ €1,200 לאדם ל-12 יום</small>
+      <small>כולל טיסות + לינה + רכב</small>
+    </div>
+  </div>
+
+  <!-- לינה -->
+  <h2 class="sec">🏠 לינה — 11 לילות, 3 בסיסים</h2>
+  <div class="stay">
+    <div class="row"><span class="dot" style="background:var(--buc)"></span><b>Baloteşti</b> · Airport Therme Residence<span class="meta">16→17.8<br>לילה 1</span></div>
+    <div class="row"><span class="dot" style="background:var(--fag)"></span><b>Dejani</b> · Horace Guesthouse (בריכה, ג'קוזי, נהר)<span class="meta">17→21.8<br>4 לילות</span></div>
+    <div class="row"><span class="dot" style="background:var(--bra)"></span><b>Brașov</b> · דירת Sonia (מרכז העיר)<span class="meta">21→25.8<br>4 לילות</span></div>
+    <div class="row"><span class="dot" style="background:var(--buc)"></span><b>Baloteşti</b> · Airport Therme Residence<span class="meta">25→27.8<br>2 לילות</span></div>
+  </div>
+
+  <!-- מסלול יומי -->
+  <h2 class="sec">🗓️ מסלול יומי — עוגנים</h2>
+  <div class="days">
+    <div class="day" style="--accent:var(--buc)"><div class="num"><b>יום 1</b><span>א׳ 16.8</span></div><div class="txt"><h4>הגעה</h4><p>נחיתה 19:15 · איסוף ואן · לינה ב-Baloteşti. <b>תיאום הגעה מאוחרת.</b></p></div></div>
+    <div class="day" style="--accent:var(--fag)"><div class="num"><b>יום 2</b><span>ב׳ 17.8</span></div><div class="txt"><h4>מעבר לדז'אני דרך בראשוב</h4><p>עצירת נוף בטירת פלש (גנים) · קניות טרי בפגאראש · צ'ק-אין ובריכה.</p></div></div>
+    <div class="day" style="--accent:var(--fag)"><div class="num"><b>יום 3</b><span>ג׳ 18.8</span></div><div class="txt"><h4>טרנספגאראשן + אגם באלאה <span class="tag">נוף</span></h4><p>הכביש האגדי, רכבל לאגם הקרחוני. יום הנוף הגדול.</p></div></div>
+    <div class="day" style="--accent:var(--fag)"><div class="num"><b>יום 4</b><span>ד׳ 19.8</span></div><div class="txt"><h4>עמק דז'אני + פארק חבלים <span class="tag">אקסטרים</span></h4><p>עמק דז'אני · פארק Drăguș (לכל הגילאים) · מנזר סמבטה.</p></div></div>
+    <div class="day" style="--accent:var(--fag)"><div class="num"><b>יום 5</b><span>ה׳ 20.8</span></div><div class="txt"><h4>סיביו + מוזיאון ASTRA</h4><p>כפר פתוח ענק, גן חיות, והעיר העתיקה של סיביו.</p></div></div>
+    <div class="day" style="--accent:var(--bra)"><div class="num"><b>יום 6</b><span>ו׳ 21.8</span></div><div class="txt"><h4>מעבר לבראשוב + ערב שבת 🕯️</h4><p>איסוף אוכל מהקהילה היהודית · צ'ק-אין · הכנות. <b>נרות 19:57.</b></p></div></div>
+    <div class="day shab"><div class="num"><b>יום 7</b><span>ש׳ 22.8</span></div><div class="txt"><h4>שבת בבראשוב 🕯️</h4><p>הליכה במרכז ההיסטורי, פארקים, בית כנסת. ללא נסיעות. <b>הבדלה 21:01.</b></p></div></div>
+    <div class="day" style="--accent:var(--bra)"><div class="num"><b>יום 8</b><span>א׳ 23.8</span></div><div class="txt"><h4>טירות + דינוזאורים <span class="tag">לבחירה</span></h4><p>בראן + Dino Parc + רשנוב. <b>או</b> שמורת הדובים + זרנשט (הדובים סגורים ב׳).</p></div></div>
+    <div class="day" style="--accent:var(--bra)"><div class="num"><b>יום 9</b><span>ב׳ 24.8</span></div><div class="txt"><h4>אקסטרים בבראשוב <span class="tag">לבחירה</span></h4><p>Parc Aventura + קרטינג Prejmer + גונדולה Poiana / ערוץ זרנשט.</p></div></div>
+    <div class="day" style="--accent:var(--buc)"><div class="num"><b>יום 10</b><span>ג׳ 25.8</span></div><div class="txt"><h4>חזרה דרומה + מכרה מלח</h4><p>Brașov → Baloteşti · עצירה במכרה המלח סלניק.</p></div></div>
+    <div class="day" style="--accent:var(--buc)"><div class="num"><b>יום 11</b><span>ד׳ 26.8</span></div><div class="txt"><h4>בוקרשט + Therme 💧</h4><p>בוקר קליל (קרטינג/פארק) · אחה"צ פארק המים Therme. סיום מפנק.</p></div></div>
+    <div class="day" style="--accent:var(--buc)"><div class="num"><b>יום 12</b><span>ה׳ 27.8</span></div><div class="txt"><h4>חזרה הביתה ✈️</h4><p>יציאה ~03:00 · החזרת ואן 04:00 · טיסה 05:45.</p></div></div>
+  </div>
+
+  <!-- שבת -->
+  <h2 class="sec" style="--fag:var(--shab)">🕯️ שבת בבראשוב</h2>
+  <div class="box">
+    שבת יחידה בטיול: <b>ו׳ 21.8 – מוצ"ש 22.8</b>.<br>
+    כניסת שבת (נרות): <b>19:57</b> · צאת שבת (הבדלה): <b>21:01</b>.<br>
+    <span style="color:var(--muted);font-size:.85rem">(אם המנהג 40 דק' לפני השקיעה — הדלקה ~19:35. לאמת מול הקהילה.)</span>
+  </div>
+
+  <!-- לתאם -->
+  <h2 class="sec">📌 לתאם / להזמין מראש</h2>
+  <div class="box">
+    <ul class="chk">
+      <li><span class="i">📞</span><div><b>מארח Baloteşti</b> (+40757759614) — הגעה מאוחרת (16.8) + יציאה לילית (27.8).</div></li>
+      <li><span class="i">🍽️</span><div><b>קהילה יהודית בראשוב</b> — איסוף אוכל שבת ביום ו׳ 21.8 בצהריים + מניין.</div></li>
+      <li><span class="i">🐻</span><div><b>שמורת הדובים Libearty</b> — הזמנה אונליין (אם בוחרים); סגור יום שני.</div></li>
+      <li><span class="i">🎟️</span><div><b>כרטיסים אונליין</b> — טירת בראן · טירת פלש · Therme · Dino Parc.</div></li>
+      <li><span class="i">🚗</span><div><b>כיסא בטיחות לבת 4</b> — בהזמנת Sixt יש 2 בוסטרים; לוודא התאמה.</div></li>
+    </ul>
+  </div>
+
+  <!-- תקציב -->
+  <h2 class="sec">💰 פירוט תקציב</h2>
+  <div class="box">
+    <table class="bud">
+      <tr><td>✈️ טיסות (8 נפשות, כולל ביטוח ביטול)</td><td>~€3,600</td></tr>
+      <tr><td>🏠 לינה (11 לילות)</td><td>~€2,564</td></tr>
+      <tr><td>🚗 רכב + דלק</td><td>~€1,240</td></tr>
+      <tr><td>🎢 אטרקציות</td><td>~€1,000</td></tr>
+      <tr><td>🍽️ אוכל</td><td>~€850</td></tr>
+      <tr><td>🧾 שונות</td><td>~€350</td></tr>
+      <tr><td>סה"כ צפוי</td><td>~€9,600</td></tr>
+    </table>
+  </div>
+
+  <div class="warn">⚠️ פתוח להחלטה: ימים 8–9 בבראשוב — עם שמורת הדובים או בלי (ראה "לבחירה" במסלול). כל השאר סגור.</div>
+
+  <footer>
+    לפרטים והרחבות — 🧭 <a href="index.html">מדריך האטרקציות</a> · 🗺️ <a href="map.html">מפה + תגובות</a><br>
+    טיול רומניה · אוגוסט 2026
+  </footer>
+</div>
+</body>
+</html>
