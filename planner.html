@@ -16,27 +16,19 @@
   body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.45}
   .wrap{max-width:1100px;margin:0 auto;padding:0 12px}
   a{color:inherit}
-
-  .topnav{position:sticky;top:0;z-index:30;background:rgba(241,244,240,.96);backdrop-filter:blur(8px);
-    border-bottom:1px solid var(--line);padding:7px 0}
+  .topnav{position:sticky;top:0;z-index:30;background:rgba(241,244,240,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:7px 0}
   .topnav .wrap{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;align-items:center}
-  .topnav a,.topnav button{text-decoration:none;font-family:var(--sans);font-size:.78rem;font-weight:700;background:var(--surface);
-    border:1px solid var(--line);border-radius:9px;padding:6px 11px;white-space:nowrap;cursor:pointer;color:var(--ink)}
+  .topnav a,.topnav button{text-decoration:none;font-family:var(--sans);font-size:.78rem;font-weight:700;background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:6px 11px;white-space:nowrap;cursor:pointer;color:var(--ink)}
   .topnav a.on{background:var(--ink);color:#fff;border-color:var(--ink)}
   #sync{font-size:.72rem;color:var(--muted);font-weight:700;padding:0 4px}
-
   header{padding:12px 0 2px;text-align:center}
   header h1{font-size:1.35rem;margin:.15em 0}
   header p{color:var(--muted);margin:.15em 0;font-size:.82rem}
 
-  /* ---- layout: ימים (מימין, עמודה אחת מלמעלה למטה) + בנק (משמאל) ---- */
   .layout{display:grid;gap:10px;grid-template-columns:1fr 126px;align-items:start;padding:10px 0 44px}
   @media(min-width:700px){.layout{grid-template-columns:1fr 250px}}
-
   .board{display:flex;flex-direction:column;gap:10px;min-width:0}
-
-  .bank{position:sticky;top:50px;background:var(--surface);border:1px solid var(--line);border-radius:13px;
-    padding:9px;box-shadow:var(--shadow);max-height:calc(100vh - 64px);overflow:auto;min-width:0}
+  .bank{position:sticky;top:50px;background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:9px;box-shadow:var(--shadow);max-height:calc(100vh - 64px);overflow:auto;min-width:0}
   .bank h2{font-size:.9rem;margin:0 0 2px}
   .bank .sub{font-size:.66rem;color:var(--muted);margin-bottom:6px}
   .bankgrp{margin-bottom:7px}
@@ -44,40 +36,55 @@
   .grph:hover{color:var(--ink)}
   .grph .cv{width:11px;display:inline-block;text-align:center;color:var(--ink)}
   .grph .n{background:#e7ede6;border-radius:999px;padding:0 6px;font-variant-numeric:tabular-nums;margin-inline-start:auto}
-  .day.locked{opacity:.72;background:#f3f5f3}
   .bankchips{display:flex;flex-direction:column;gap:5px}
 
-  .chip{display:flex;flex-direction:column;gap:1px;border:1px solid var(--line);border-radius:9px;padding:6px 8px;
-    background:var(--surface);cursor:grab;touch-action:none;user-select:none;border-inline-start:4px solid var(--ac);
-    width:100%;min-width:0;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  .chip{display:flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:9px;padding:6px 8px;background:var(--surface);
+    cursor:grab;touch-action:none;user-select:none;border-inline-start:4px solid var(--ac);width:100%;min-width:0;box-shadow:0 1px 2px rgba(0,0,0,.04)}
   .chip.sel{outline:2px solid var(--ink);outline-offset:1px}
+  .chip .ci{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
   .chip .nm{font-size:.74rem;font-weight:650;line-height:1.25}
   .chip .mt{font-size:.6rem;color:var(--muted)}
   .chip .bad{color:var(--warn);font-weight:800}
+  .chip .info{flex:0 0 auto;border:none;background:none;cursor:pointer;font-size:1rem;color:var(--muted);padding:0 2px;line-height:1;touch-action:auto}
+  .chip .info:hover{color:var(--bra)}
   .chip.dragging{opacity:.4}
 
-  .day{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:9px 11px;box-shadow:var(--shadow);
-    border-top:4px solid var(--ac);display:flex;flex-direction:column;gap:6px}
+  .day{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:9px 11px;box-shadow:var(--shadow);border-top:4px solid var(--ac);display:flex;flex-direction:column;gap:6px}
   .day.over{outline:2px dashed var(--ac);outline-offset:2px;background:color-mix(in srgb,var(--ac) 7%,#fff)}
   .day.hasissue{border-top-color:var(--warn)}
   .day.shab{--ac:var(--shab)}
+  .day.locked{opacity:.72;background:#f3f5f3}
   .day-h{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
   .day-h b{font-size:.72rem;font-weight:800;color:var(--ac);letter-spacing:.3px}
   .day-h .dt{font-size:.74rem;color:var(--muted);font-variant-numeric:tabular-nums}
   .day-h .rg{margin-inline-start:auto;font-size:.63rem;font-weight:700;color:var(--ac);background:color-mix(in srgb,var(--ac) 12%,#fff);border-radius:999px;padding:1px 7px}
   .day .note{font-size:.66rem;color:var(--muted)}
   .drop{display:flex;flex-wrap:wrap;gap:6px;min-height:30px}
-  .drop .chip{width:auto;min-width:120px;flex:1 1 150px}
+  .drop .chip{width:auto;min-width:130px;flex:1 1 160px}
   @media(max-width:520px){.drop .chip{flex-basis:100%}}
   .placeholder{border:1.5px dashed var(--line);border-radius:9px;padding:8px;text-align:center;color:#9aa8a0;font-size:.7rem;width:100%}
   .issues{display:flex;flex-direction:column;gap:4px}
   .issue{font-size:.69rem;background:var(--warnbg);color:var(--warn);border:1px solid #f0dcc0;border-radius:7px;padding:4px 7px}
   .day-x{align-self:flex-start;font-size:.64rem;color:var(--muted);background:none;border:none;cursor:pointer;padding:0;text-decoration:underline}
 
-  #ghost{position:fixed;z-index:200;pointer-events:none;opacity:.92;transform:translate(-50%,-50%) rotate(-2deg);
-    box-shadow:0 8px 24px rgba(0,0,0,.25);max-width:170px}
+  #ghost{position:fixed;z-index:200;pointer-events:none;opacity:.92;transform:translate(-50%,-50%) rotate(-2deg);box-shadow:0 8px 24px rgba(0,0,0,.25);max-width:180px}
   .hint{background:#eef3f6;border:1px solid #d6e4ec;border-radius:9px;padding:7px 11px;font-size:.76rem;color:#2b5066;margin:8px 0}
   footer{color:var(--muted);font-size:.72rem;text-align:center;padding:16px 0}
+
+  /* info popup */
+  .ov{position:fixed;inset:0;background:rgba(15,25,20,.5);z-index:120;display:none;align-items:flex-end;justify-content:center}
+  .ov.open{display:flex}
+  .sheet{background:var(--surface);width:100%;max-width:480px;border-radius:18px 18px 0 0;padding:18px;box-shadow:var(--shadow)}
+  @media(min-width:520px){.ov{align-items:center}.sheet{border-radius:18px}}
+  .sheet .sh-h{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .sheet h3{font-size:1.1rem;margin:0;flex:1}
+  .sheet .x{border:none;background:var(--ground);border-radius:8px;width:30px;height:30px;font-size:1.05rem;cursor:pointer;color:var(--muted)}
+  .sheet .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+  .sheet .cchip{font-size:.7rem;font-weight:700;border-radius:999px;padding:2px 9px;background:color-mix(in srgb,var(--ac) 13%,#fff);color:var(--ac)}
+  .sheet p{font-size:.9rem;color:#33443b;margin:0 0 12px}
+  .sheet .lnks{display:flex;gap:8px;flex-wrap:wrap}
+  .sheet .lnks a{text-decoration:none;font-size:.82rem;font-weight:700;border-radius:9px;padding:9px 13px;border:1px solid var(--line);color:var(--ink)}
+  .sheet .lnks a.pri{background:var(--bra);color:#fff;border-color:var(--bra)}
 </style>
 </head>
 <body>
@@ -94,10 +101,9 @@
 <div class="wrap">
   <header>
     <h1>🧩 מתכנן המסלול</h1>
-    <p>גררו פעילות מהבנק (משמאל) ליום — או הקישו על פעילות ואז על יום.</p>
-    <div class="hint">☁️ התכנון <b>משותף לכל המשפחה</b> ונשמר בענן — כל שינוי מתעדכן אצל כולם. ⚠️ התרעות דינמיות על אי-התאמת אזור או מרחק גדול בין פעילויות באותו יום.</div>
+    <p>גררו פעילות מהבנק ליום · הקישו לבחירה · ⓘ לפרטים ולינקים</p>
+    <div class="hint">☁️ התכנון <b>משותף לכל המשפחה</b> ומתעדכן אצל כולם. ⚠️ התרעות על אי-התאמת אזור/מרחק. ימי מעבר מקבלים שני אזורים.</div>
   </header>
-
   <div class="layout">
     <div class="board" id="board"></div>
     <div class="bank">
@@ -109,118 +115,105 @@
   <footer>מתכנן מסלול · טיול רומניה אוגוסט 2026</footer>
 </div>
 
+<div class="ov" id="info"><div class="sheet"><div class="sh-h"><h3 id="ifTitle"></h3><button class="x" id="ifClose">✕</button></div>
+  <div class="chips" id="ifChips"></div><p id="ifDesc"></p><div class="lnks" id="ifLnks"></div></div></div>
+
 <script>
 const AC={"פגאראש":"#2f6d4f","בראשוב":"#2b6079","בוקרשט":"#b07514"};
 const CATORDER=["טבע","אקסטרים","טירות","מים","חיות","משפחתי","תרבות","קרטינג"];
 
 const ACTS=[
- {id:"balea",ic:"⛰️",name:"טרנספגאראשן + באלאה",area:"פגאראש",cat:"טבע",lat:45.602000,lng:24.617000},
- {id:"telecabina",ic:"🚡",name:"רכבל באלאה",area:"פגאראש",cat:"טבע",lat:45.636520,lng:24.606884},
- {id:"dragus",ic:"🎢",name:"פארק חבלים Drăguș",area:"פגאראש",cat:"אקסטרים",lat:45.694391,lng:24.778457},
- {id:"sambata",ic:"⛪",name:"מנזר סמבטה",area:"פגאראש",cat:"תרבות",lat:45.690100,lng:24.794700},
- {id:"fagaras",ic:"🏰",name:"מבצר פגאראש",area:"פגאראש",cat:"טירות",lat:45.845278,lng:24.973611},
- {id:"astra",ic:"🏘️",name:"מוזיאון ASTRA",area:"פגאראש",cat:"משפחתי",lat:45.755186,lng:24.116125},
- {id:"zoosibiu",ic:"🦁",name:"גן חיות סיביו",area:"פגאראש",cat:"חיות",lat:45.762466,lng:24.123596},
- {id:"sibiu",ic:"🏛️",name:"סיביו העיר העתיקה",area:"פגאראש",cat:"תרבות",lat:45.796621,lng:24.151758},
- {id:"ocna",ic:"🧂",name:"אגמי מלח Ocna",area:"פגאראש",cat:"מים",lat:45.876953,lng:24.063323},
- {id:"peles",ic:"🏰",name:"טירת פלש (סינאיה)",area:"בראשוב",cat:"טירות",lat:45.359840,lng:25.542650},
- {id:"bran",ic:"🧛",name:"טירת בראן",area:"בראשוב",cat:"טירות",lat:45.514930,lng:25.367160},
- {id:"rasnov",ic:"🏰",name:"מבצר רשנוב",area:"בראשוב",cat:"טירות",lat:45.590590,lng:25.469310},
- {id:"dino",ic:"🦕",name:"Dino Parc",area:"בראשוב",cat:"משפחתי",lat:45.591340,lng:25.474150},
- {id:"aventura",ic:"🎢",name:"Parc Aventura",area:"בראשוב",cat:"אקסטרים",lat:45.612414,lng:25.636275},
- {id:"postavaru",ic:"🚡",name:"גונדולה Poiana",area:"בראשוב",cat:"טבע",lat:45.588020,lng:25.552799},
- {id:"libearty",ic:"🐻",name:"שמורת דובים",area:"בראשוב",cat:"חיות",lat:45.594816,lng:25.379514},
- {id:"zarnesti",ic:"🥾",name:"ערוץ זרנשט",area:"בראשוב",cat:"טבע",lat:45.535817,lng:25.292071},
- {id:"tampa",ic:"🚡",name:"רכבל Tâmpa",area:"בראשוב",cat:"טבע",lat:45.639538,lng:25.593355},
- {id:"sfatului",ic:"🏛️",name:"בראשוב העיר העתיקה",area:"בראשוב",cat:"תרבות",lat:45.642000,lng:25.589000},
- {id:"prejmer",ic:"🏎️",name:"קרטינג Prejmer",area:"בראשוב",cat:"קרטינג",lat:45.746070,lng:25.770130},
- {id:"zoobrasov",ic:"🦁",name:"גן חיות בראשוב",area:"בראשוב",cat:"חיות",lat:45.614237,lng:25.633224},
- {id:"therme",ic:"💧",name:"Therme București",area:"בוקרשט",cat:"מים",lat:44.605550,lng:26.085360},
- {id:"slanic",ic:"🧂",name:"מכרה מלח סלניק",area:"בוקרשט",cat:"משפחתי",lat:45.235560,lng:25.942500},
- {id:"parliament",ic:"🏛️",name:"ארמון הפרלמנט",area:"בוקרשט",cat:"תרבות",lat:44.427500,lng:26.087500},
- {id:"antipa",ic:"🦖",name:"מוזיאון Antipa",area:"בוקרשט",cat:"משפחתי",lat:44.453100,lng:26.084600},
- {id:"mina",ic:"🌀",name:"MINA אימרסיבי",area:"בוקרשט",cat:"תרבות",lat:44.479014,lng:26.117253},
- {id:"herastrau",ic:"🌳",name:"פארק Herăstrău",area:"בוקרשט",cat:"טבע",lat:44.478060,lng:26.081417},
- {id:"amckart",ic:"🏎️",name:"קרטינג AMCKART",area:"בוקרשט",cat:"קרטינג",lat:44.536637,lng:26.150364},
- {id:"zoobuc",ic:"🦁",name:"גן חיות בוקרשט",area:"בוקרשט",cat:"חיות",lat:44.517400,lng:26.103900},
- {id:"telesinaia",ic:"🚡",name:"רכבל סיניה (בוצ'ג'י)",area:"בראשוב",cat:"טבע",lat:45.349490,lng:25.545950},
- {id:"bucegi",ic:"🏔️",name:"רמת בוצ'ג'י (ספינקס)",area:"בראשוב",cat:"טבע",lat:45.408300,lng:25.470300},
- {id:"ghica",ic:"🌳",name:"פארק דימיטרי גיקה (סיניה)",area:"בראשוב",cat:"טבע",lat:45.354090,lng:25.551980},
- {id:"aqua",ic:"💧",name:"פארק מים Paradisul Acvatic",area:"בראשוב",cat:"מים",lat:45.673577,lng:25.585998},
- {id:"bolboci",ic:"🏞️",name:"אגם בולבוצ'י",area:"בראשוב",cat:"טבע",lat:45.346222,lng:25.427972},
- {id:"paltinu",ic:"🌊",name:"אגם וסכר פלטינו",area:"בראשוב",cat:"טבע",lat:45.245710,lng:25.736830},
- {id:"telebusteni",ic:"🚡",name:"רכבל בושטני (בוצ'ג'י)",area:"בראשוב",cat:"טבע",lat:45.408829,lng:25.525511}
+ {id:"balea",ic:"⛰️",name:"טרנספגאראשן + באלאה",area:"פגאראש",cat:"טבע",lat:45.602000,lng:24.617000,d:"כביש הרים מפותל + אגם קרחוני ב-2,034 מ'.",site:""},
+ {id:"telecabina",ic:"🚡",name:"רכבל באלאה",area:"פגאראש",cat:"טבע",lat:45.636520,lng:24.606884,d:"רכבל מהמפל אל אגם באלאה.",site:"https://muntii-fagaras.ro/en/cablecar"},
+ {id:"dragus",ic:"🎢",name:"פארק חבלים Drăguș",area:"פגאראש",cat:"אקסטרים",lat:45.694391,lng:24.778457,d:"פארק חבלים מדורג לכל הגילאים, מגיל ~4.",site:"https://www.aventura-dragus.ro/en/"},
+ {id:"sambata",ic:"⛪",name:"מנזר סמבטה",area:"פגאראש",cat:"תרבות",lat:45.690100,lng:24.794700,d:"מנזר יפהפה עם גנים למרגלות ההרים.",site:"https://www.manastireabrancoveanu.ro/"},
+ {id:"fagaras",ic:"🏰",name:"מבצר פגאראש",area:"פגאראש",cat:"טירות",lat:45.845278,lng:24.973611,d:"מצודה מהמאה 14 מוקפת חפיר מים + מוזיאון.",site:"https://www.cetateafagarasului.com/"},
+ {id:"astra",ic:"🏘️",name:"מוזיאון ASTRA",area:"פגאראש",cat:"משפחתי",lat:45.755186,lng:24.116125,d:"מוזיאון כפר פתוח ענק — חיות, טחנות, מגרשי משחק.",site:"https://www.muzeulastra.com/"},
+ {id:"zoosibiu",ic:"🦁",name:"גן חיות סיביו",area:"פגאראש",cat:"חיות",lat:45.762466,lng:24.123596,d:"גן חיות ביער ליד אגם, אפשר סירה.",site:"https://www.zoosibiu.ro/"},
+ {id:"sibiu",ic:"🏛️",name:"סיביו העיר העתיקה",area:"פגאראש",cat:"תרבות",lat:45.796621,lng:24.151758,d:"כיכר גדולה, גשר השקרים, גגות 'דמויי עיניים'.",site:""},
+ {id:"ocna",ic:"🧂",name:"אגמי מלח Ocna",area:"פגאראש",cat:"מים",lat:45.876953,lng:24.063323,d:"אגמי מלח לציפה ובוץ מרפא.",site:""},
+ {id:"peles",ic:"🏰",name:"טירת פלש (סינאיה)",area:"בראשוב",cat:"טירות",lat:45.359840,lng:25.542650,d:"ארמון מלכותי מפואר; סגור ב'+ג', נפתח 11:00.",site:"https://peles-castle.ro/peles-castle/"},
+ {id:"bran",ic:"🧛",name:"טירת בראן",area:"בראשוב",cat:"טירות",lat:45.514930,lng:25.367160,d:"טירת 'דרקולה' + מנהרת זמן. צפוף בעונה.",site:"https://www.bran-castle.com/en/"},
+ {id:"rasnov",ic:"🏰",name:"מבצר רשנוב",area:"בראשוב",cat:"טירות",lat:45.590590,lng:25.469310,d:"מבצר על גבעה + נוף; עגלת טרקטור למעלה.",site:""},
+ {id:"dino",ic:"🦕",name:"Dino Parc",area:"בראשוב",cat:"משפחתי",lat:45.591340,lng:25.474150,d:"120+ דינוזאורים בגודל טבעי; צמוד לרשנוב.",site:"https://dinoparc.ro/en/"},
+ {id:"aventura",ic:"🎢",name:"Parc Aventura",area:"בראשוב",cat:"אקסטרים",lat:45.612414,lng:25.636275,d:"פארק חבלים גדול מעל אגם, מגיל 4.",site:"https://www.parc-aventura.ro/"},
+ {id:"postavaru",ic:"🚡",name:"גונדולה Poiana",area:"בראשוב",cat:"טבע",lat:45.588020,lng:25.552799,d:"גונדולה לפסגת Postăvarul (~1,799 מ').",site:"https://www.discoverpoiana.ro/ro/instalatii"},
+ {id:"libearty",ic:"🐻",name:"שמורת דובים",area:"בראשוב",cat:"חיות",lat:45.594816,lng:25.379514,d:"שמורת דובים; סגור יום שני, הזמנה מראש.",site:"https://millionsoffriends.org/en/libearty/"},
+ {id:"zarnesti",ic:"🥾",name:"ערוץ זרנשט",area:"בראשוב",cat:"טבע",lat:45.535817,lng:25.292071,d:"הליכה קלילה בקניון צר; טוב לילדים.",site:""},
+ {id:"tampa",ic:"🚡",name:"רכבל Tâmpa",area:"בראשוב",cat:"טבע",lat:45.639538,lng:25.593355,d:"רכבל לנוף על בראשוב + שלט BRAȘOV.",site:""},
+ {id:"sfatului",ic:"🏛️",name:"בראשוב העיר העתיקה",area:"בראשוב",cat:"תרבות",lat:45.642000,lng:25.589000,d:"לב העיר: כיכר, כנסייה שחורה, רחוב צר.",site:""},
+ {id:"prejmer",ic:"🏎️",name:"קרטינג Prejmer",area:"בראשוב",cat:"קרטינג",lat:45.746070,lng:25.770130,d:"מסלול קרטינג חוץ; קרט כפול לילדים.",site:"https://prejmer-raceway.com/"},
+ {id:"zoobrasov",ic:"🦁",name:"גן חיות בראשוב",area:"בראשוב",cat:"חיות",lat:45.614237,lng:25.633224,d:"~300 חיות ביער ליד אגם Noua.",site:"https://zoobrasov.ro/en/"},
+ {id:"therme",ic:"💧",name:"Therme București",area:"בוקרשט",cat:"מים",lat:44.605550,lng:26.085360,d:"פארק מים/ספא ענק, 16 מגלשות.",site:"https://therme.ro/"},
+ {id:"slanic",ic:"🧂",name:"מכרה מלח סלניק",area:"בוקרשט",cat:"משפחתי",lat:45.235560,lng:25.942500,d:"אולם מלח ענק; קר ~12°, סגור ראשון.",site:"https://primariaslanic.ro/"},
+ {id:"parliament",ic:"🏛️",name:"ארמון הפרלמנט",area:"בוקרשט",cat:"תרבות",lat:44.427500,lng:26.087500,d:"הבניין השני בגודלו בעולם; הזמנה+דרכון.",site:"https://cic.cdep.ro/en/vizitare"},
+ {id:"antipa",ic:"🦖",name:"מוזיאון Antipa",area:"בוקרשט",cat:"משפחתי",lat:44.453100,lng:26.084600,d:"מוזיאון טבע אינטראקטיבי + דינוזאורים.",site:"https://antipa.ro/"},
+ {id:"mina",ic:"🌀",name:"MINA אימרסיבי",area:"בוקרשט",cat:"תרבות",lat:44.479014,lng:26.117253,d:"חוויה אימרסיבית 360° + אזור ילדים.",site:"https://www.minamuseum.com/"},
+ {id:"herastrau",ic:"🌳",name:"פארק Herăstrău",area:"בוקרשט",cat:"טבע",lat:44.478060,lng:26.081417,d:"פארק אגם — שיט, אופניים, מגרשי משחק.",site:""},
+ {id:"amckart",ic:"🏎️",name:"קרטינג AMCKART",area:"בוקרשט",cat:"קרטינג",lat:44.536637,lng:26.150364,d:"מסלול קרטינג חוץ; גובה מינ' ~120 ס\"מ.",site:"https://www.amckart.ro/"},
+ {id:"zoobuc",ic:"🦁",name:"גן חיות בוקרשט",area:"בוקרשט",cat:"חיות",lat:44.517400,lng:26.103900,d:"גן חיות ביער בניאסה, 150+ מינים.",site:"https://bucurestizoo.ro/en/"},
+ {id:"telesinaia",ic:"🚡",name:"רכבל סיניה (בוצ'ג'י)",area:"בראשוב",cat:"טבע",lat:45.349490,lng:25.545950,d:"רכבל מסיניה לרמת בוצ'ג'י.",site:""},
+ {id:"bucegi",ic:"🏔️",name:"רמת בוצ'ג'י (ספינקס)",area:"בראשוב",cat:"טבע",lat:45.408300,lng:25.470300,d:"תצורות הסלע ספינקס ובאבלה ~2,200 מ'.",site:"https://en.wikipedia.org/wiki/Sphinx_(Romania)"},
+ {id:"ghica",ic:"🌳",name:"פארק דימיטרי גיקה (סיניה)",area:"בראשוב",cat:"טבע",lat:45.354090,lng:25.551980,d:"פארק ירוק מרכזי בסיניה + קזינו.",site:""},
+ {id:"aqua",ic:"💧",name:"פארק מים Paradisul Acvatic",area:"בראשוב",cat:"מים",lat:45.673577,lng:25.585998,d:"פארק מים מקורה+חיצוני בבראשוב.",site:""},
+ {id:"bolboci",ic:"🏞️",name:"אגם בולבוצ'י",area:"בראשוב",cat:"טבע",lat:45.346222,lng:25.427972,d:"אגם מאגר ציורי בבוצ'ג'י (~1,440 מ').",site:""},
+ {id:"paltinu",ic:"🌊",name:"אגם וסכר פלטינו",area:"בראשוב",cat:"טבע",lat:45.245710,lng:25.736830,d:"סכר קשתי ואגם בעמק דופטנה.",site:""},
+ {id:"telebusteni",ic:"🚡",name:"רכבל בושטני (בוצ'ג'י)",area:"בראשוב",cat:"טבע",lat:45.408829,lng:25.525511,d:"רכבל ארוך מבושטני לבאבלה/הרמה.",site:""}
 ];
+const BYID=Object.fromEntries(ACTS.map(a=>[a.id,a]));
 
 const DAYS=[
- {n:"יום 1",dt:"א׳ 16.8",region:"בוקרשט",note:"הגעה בערב",locked:true},
- {n:"יום 2",dt:"ב׳ 17.8",region:"פגאראש",note:"מעבר דרך בראשוב"},
- {n:"יום 3",dt:"ג׳ 18.8",region:"פגאראש",note:"בסיס דז'אני"},
- {n:"יום 4",dt:"ד׳ 19.8",region:"פגאראש",note:"בסיס דז'אני"},
- {n:"יום 5",dt:"ה׳ 20.8",region:"פגאראש",note:"בסיס דז'אני"},
- {n:"יום 6",dt:"ו׳ 21.8",region:"בראשוב",note:"מעבר + ערב שבת 🕯️"},
- {n:"יום 7",dt:"ש׳ 22.8",region:"בראשוב",note:"שבת — הליכה בלבד",shab:true},
- {n:"יום 8",dt:"א׳ 23.8",region:"בראשוב",note:"בסיס בראשוב"},
- {n:"יום 9",dt:"ב׳ 24.8",region:"בראשוב",note:"בסיס בראשוב"},
- {n:"יום 10",dt:"ג׳ 25.8",region:"בוקרשט",note:"מעבר דרומה"},
- {n:"יום 11",dt:"ד׳ 26.8",region:"בוקרשט",note:"בוקרשט + Therme"},
- {n:"יום 12",dt:"ה׳ 27.8",region:"בוקרשט",note:"טיסה 05:45",locked:true}
+ {n:"יום 1",dt:"א׳ 16.8",regions:["בוקרשט"],note:"הגעה בערב",locked:true},
+ {n:"יום 2",dt:"ב׳ 17.8",regions:["פגאראש","בראשוב"],note:"מעבר: בוקרשט→סינאיה→דז'אני"},
+ {n:"יום 3",dt:"ג׳ 18.8",regions:["פגאראש"],note:"בסיס דז'אני"},
+ {n:"יום 4",dt:"ד׳ 19.8",regions:["פגאראש"],note:"בסיס דז'אני"},
+ {n:"יום 5",dt:"ה׳ 20.8",regions:["פגאראש"],note:"בסיס דז'אני"},
+ {n:"יום 6",dt:"ו׳ 21.8",regions:["פגאראש","בראשוב"],note:"מעבר + ערב שבת 🕯️"},
+ {n:"יום 7",dt:"ש׳ 22.8",regions:["בראשוב"],note:"שבת — הליכה בלבד",shab:true},
+ {n:"יום 8",dt:"א׳ 23.8",regions:["בראשוב"],note:"בסיס בראשוב"},
+ {n:"יום 9",dt:"ב׳ 24.8",regions:["בראשוב"],note:"בסיס בראשוב"},
+ {n:"יום 10",dt:"ג׳ 25.8",regions:["בראשוב","בוקרשט"],note:"מעבר דרומה (סינאיה/סלניק)"},
+ {n:"יום 11",dt:"ד׳ 26.8",regions:["בוקרשט"],note:"בוקרשט + Therme"},
+ {n:"יום 12",dt:"ה׳ 27.8",regions:["בוקרשט"],note:"טיסה 05:45",locked:true}
 ];
 const REC={peles:1,fagaras:1,balea:2,telecabina:2,dragus:3,sambata:3,astra:4,zoosibiu:4,sibiu:4,tampa:5,sfatului:6,bran:7,dino:7,rasnov:7,aventura:8,prejmer:8,postavaru:8,slanic:9,therme:10,herastrau:10,amckart:10};
 
-// ---------- backend (Google Sheet, שיתופי) — משתמש באותו endpoint של הביקורות ----------
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbwJBISpWWpkDL9U9RX9VLWFfVnF5fpElhEr5uK4coYhv8SX-tevo0R8uZI8jcTh7GxvXg/exec";
 const configured=SCRIPT_URL && !SCRIPT_URL.includes("PASTE_YOUR");
 const KEY="ro2026_planner";
-let state=loadLocal();
-let selectedId=null, lastLocalChange=0;
+let state=loadLocal(), selectedId=null, lastLocalChange=0;
 let collapsed=loadCollapsed();
-function loadCollapsed(){try{return new Set(JSON.parse(localStorage.getItem('ro2026_collapsed')||'[]'));}catch(e){return new Set();}}
-function saveCollapsed(){try{localStorage.setItem('ro2026_collapsed',JSON.stringify([...collapsed]));}catch(e){}}
-function toggleCat(cat){ collapsed.has(cat)?collapsed.delete(cat):collapsed.add(cat); saveCollapsed(); render(); }
-function isLocked(dv){ return dv!=='bank'&&dv!=null&&DAYS[+dv]&&DAYS[+dv].locked; }
 
 function emptyState(){const o={};ACTS.forEach(a=>o[a.id]=null);return o;}
-function loadLocal(){ try{const s=JSON.parse(localStorage.getItem(KEY)); if(s){const o=emptyState();Object.keys(s).forEach(k=>{if(k in o)o[k]=s[k];});return o;}}catch(e){} return emptyState(); }
-function saveLocal(){ try{localStorage.setItem(KEY,JSON.stringify(assignedOnly()));}catch(e){} }
+function loadLocal(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s){const o=emptyState();Object.keys(s).forEach(k=>{if(k in o)o[k]=s[k];});return o;}}catch(e){}return emptyState();}
+function saveLocal(){try{localStorage.setItem(KEY,JSON.stringify(assignedOnly()));}catch(e){}}
 function assignedOnly(){const o={};ACTS.forEach(a=>{if(state[a.id]!=null)o[a.id]=state[a.id];});return o;}
 function norm(o){return Object.keys(o||{}).sort().map(k=>k+':'+o[k]).join('|');}
 function applyAssigned(asg){const o=emptyState();Object.keys(asg||{}).forEach(id=>{if(id in o)o[id]=asg[id];});return o;}
-
-function setSync(t){const el=document.getElementById('sync'); if(el)el.textContent=t;}
+function loadCollapsed(){try{return new Set(JSON.parse(localStorage.getItem('ro2026_collapsed')||'[]'));}catch(e){return new Set();}}
+function saveCollapsed(){try{localStorage.setItem('ro2026_collapsed',JSON.stringify([...collapsed]));}catch(e){}}
+function toggleCat(cat){collapsed.has(cat)?collapsed.delete(cat):collapsed.add(cat);saveCollapsed();render();}
+function isLocked(dv){return dv!=='bank'&&dv!=null&&DAYS[+dv]&&DAYS[+dv].locked;}
+function setSync(t){const el=document.getElementById('sync');if(el)el.textContent=t;}
 
 function jsonp(url){return new Promise((res,rej)=>{const cb='cb_'+Math.floor(Math.random()*1e9);
-  window[cb]=d=>{res(d);cl();};const s=document.createElement('script');
-  s.src=url+(url.includes('?')?'&':'?')+'callback='+cb;s.onerror=()=>{rej(new Error('x'));cl();};
-  function cl(){delete window[cb];s.remove();}document.body.appendChild(s);});}
-
-function persist(){ saveLocal(); lastLocalChange=Date.now(); postPlan(); }
-function postPlan(){
-  if(!configured){setSync('💾 מקומי');return;}
-  setSync('☁️ שומר…');
-  fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},
-    body:JSON.stringify({poi:'__plan__',name:'planner',rating:'',comment:JSON.stringify(assignedOnly())})})
-    .then(()=>setSync('☁️ מסונכרן')).catch(()=>setSync('⚠️ לא נשמר'));
-}
-async function fetchRemotePlan(){
-  if(!configured) return null;
-  try{
-    const d=await jsonp(SCRIPT_URL);
-    const revs=Array.isArray(d)?d:(d.reviews||[]);
-    const plans=revs.filter(r=>r.poi==='__plan__'&&r.comment);
-    if(!plans.length) return null;
-    plans.sort((a,b)=>String(a.timestamp).localeCompare(String(b.timestamp)));
-    return JSON.parse(plans[plans.length-1].comment);
-  }catch(e){ return null; }
-}
+  window[cb]=d=>{res(d);cl();};const s=document.createElement('script');s.src=url+(url.includes('?')?'&':'?')+'callback='+cb;
+  s.onerror=()=>{rej(new Error('x'));cl();};function cl(){delete window[cb];s.remove();}document.body.appendChild(s);});}
+function persist(){saveLocal();lastLocalChange=Date.now();postPlan();}
+function postPlan(){if(!configured){setSync('💾 מקומי');return;}setSync('☁️ שומר…');
+  fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({poi:'__plan__',name:'planner',rating:'',comment:JSON.stringify(assignedOnly())})})
+  .then(()=>setSync('☁️ מסונכרן')).catch(()=>setSync('⚠️ לא נשמר'));}
+async function fetchRemotePlan(){if(!configured)return null;try{const d=await jsonp(SCRIPT_URL);const revs=Array.isArray(d)?d:(d.reviews||[]);
+  const plans=revs.filter(r=>r.poi==='__plan__'&&r.comment);if(!plans.length)return null;
+  plans.sort((a,b)=>String(a.timestamp).localeCompare(String(b.timestamp)));return JSON.parse(plans[plans.length-1].comment);}catch(e){return null;}}
 
 function haversine(a,b){const R=6371,r=x=>x*Math.PI/180;const dLat=r(b.lat-a.lat),dLng=r(b.lng-a.lng);
   const s=Math.sin(dLat/2)**2+Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(dLng/2)**2;return 2*R*Math.asin(Math.sqrt(s));}
 function actsIn(d){return ACTS.filter(a=>state[a.id]===d);}
 function issuesFor(d){
   const day=DAYS[d],acts=actsIn(d),list=[],badIds=new Set();
-  acts.forEach(a=>{if(a.area!==day.region){list.push(`📍 ${a.name}: אזור ${a.area} — לא תואם ליום (${day.region})`);badIds.add(a.id);}});
-  if(day.shab) acts.forEach(a=>{if(!(a.cat==='תרבות'&&a.area===day.region)){list.push(`🕯️ ${a.name}: לא מתאים לשבת`);badIds.add(a.id);}});
+  acts.forEach(a=>{if(!day.regions.includes(a.area)){list.push(`📍 ${a.name}: אזור ${a.area} — לא תואם ליום (${day.regions.join('/')})`);badIds.add(a.id);}});
+  if(day.shab) acts.forEach(a=>{if(!(a.cat==='תרבות'&&day.regions.includes(a.area))){list.push(`🕯️ ${a.name}: לא מתאים לשבת`);badIds.add(a.id);}});
   let maxd=0,pair=null;
   for(let i=0;i<acts.length;i++)for(let j=i+1;j<acts.length;j++){const dd=haversine(acts[i],acts[j]);if(dd>maxd){maxd=dd;pair=[acts[i],acts[j]];}}
   if(maxd>45&&pair) list.push(`↔️ מרחק גדול: ~${Math.round(maxd)} ק"מ בין ${pair[0].name} ל${pair[1].name}`);
@@ -232,94 +225,97 @@ const bankEl=document.getElementById('bank'), boardEl=document.getElementById('b
 function chipHTML(a,badIds){
   const bad=badIds&&badIds.has(a.id);
   return `<div class="chip${selectedId===a.id?' sel':''}" data-id="${a.id}" style="--ac:${AC[a.area]}">
-    <span class="nm">${a.ic} ${a.name} ${bad?'<span class="bad">⚠</span>':''}</span>
-    <span class="mt">${a.area}</span></div>`;
+    <div class="ci"><span class="nm">${a.ic} ${a.name} ${bad?'<span class="bad">⚠</span>':''}</span><span class="mt">${a.area} · ${a.cat}</span></div>
+    <button class="info" data-info="${a.id}" aria-label="פרטים">ⓘ</button></div>`;
 }
 function renderBank(){
   const inBank=ACTS.filter(a=>state[a.id]==null);
   document.getElementById('bankcount').textContent=`${inBank.length} לשיבוץ`;
-  const groups={}; inBank.forEach(a=>{(groups[a.cat]=groups[a.cat]||[]).push(a);});
-  let h=''; CATORDER.forEach(cat=>{ if(groups[cat]){ const isC=collapsed.has(cat);
-    h+=`<div class="bankgrp"><div class="grph" data-cat="${cat}"><span class="cv">${isC?'▸':'▾'}</span>${cat}<span class="n">${groups[cat].length}</span></div>${isC?'':`<div class="bankchips">${groups[cat].map(a=>chipHTML(a)).join('')}</div>`}</div>`; } });
+  const groups={};inBank.forEach(a=>{(groups[a.cat]=groups[a.cat]||[]).push(a);});
+  let h='';CATORDER.forEach(cat=>{if(groups[cat]){const isC=collapsed.has(cat);
+    h+=`<div class="bankgrp"><div class="grph" data-cat="${cat}"><span class="cv">${isC?'▸':'▾'}</span>${cat}<span class="n">${groups[cat].length}</span></div>${isC?'':`<div class="bankchips">${groups[cat].map(a=>chipHTML(a)).join('')}</div>`}</div>`;}});
   bankEl.innerHTML=h||'<div class="placeholder">הכל שובץ 🎉</div>';
 }
 function renderBoard(){
   boardEl.innerHTML=DAYS.map((day,d)=>{
-    if(day.locked){
-      return `<div class="day locked" data-day="${d}" style="--ac:${AC[day.region]}">
-        <div class="day-h"><b>${day.n}</b><span class="dt">${day.dt}</span><span class="rg">${day.region}</span></div>
-        <div class="note">${day.note}</div>
-        <div class="placeholder">🔒 ${d===0?'יום הגעה — אין שיבוץ':'יום טיסה — אין שיבוץ'}</div></div>`;
-    }
+    const rg=day.regions.join('/'), acc=AC[day.regions[0]];
+    if(day.locked) return `<div class="day locked" data-day="${d}" style="--ac:${acc}"><div class="day-h"><b>${day.n}</b><span class="dt">${day.dt}</span><span class="rg">${rg}</span></div><div class="note">${day.note}</div><div class="placeholder">🔒 ${d===0?'יום הגעה — אין שיבוץ':'יום טיסה — אין שיבוץ'}</div></div>`;
     const {list,badIds}=issuesFor(d),acts=actsIn(d);
     const chips=acts.map(a=>chipHTML(a,badIds)).join('')||'<div class="placeholder">גרור/הקש לשיבוץ פעילות</div>';
     const iss=list.length?`<div class="issues">${list.map(t=>`<div class="issue">${t}</div>`).join('')}</div>`:'';
     const clr=acts.length?`<button class="day-x" data-clear="${d}">נקה יום</button>`:'';
-    return `<div class="day${day.shab?' shab':''}${list.length?' hasissue':''}" data-day="${d}" style="--ac:${AC[day.region]}">
-      <div class="day-h"><b>${day.n}</b><span class="dt">${day.dt}</span><span class="rg">${day.region}</span></div>
-      <div class="note">${day.note}</div><div class="drop">${chips}</div>${iss}${clr}</div>`;
+    return `<div class="day${day.shab?' shab':''}${list.length?' hasissue':''}" data-day="${d}" style="--ac:${acc}"><div class="day-h"><b>${day.n}</b><span class="dt">${day.dt}</span><span class="rg">${rg}</span></div><div class="note">${day.note}</div><div class="drop">${chips}</div>${iss}${clr}</div>`;
   }).join('');
 }
-function render(){ renderBank(); renderBoard(); bindChips(); }
-function assign(id,day){ if(isLocked(day))return; state[id]=(day==='bank'||day==null)?null:+day; selectedId=null; persist(); render(); }
+function render(){renderBank();renderBoard();bindChips();}
+function assign(id,day){if(isLocked(day))return;state[id]=(day==='bank'||day==null)?null:+day;selectedId=null;persist();render();}
 
-// clicks: place selected on day / clear
 let suppressClick=false;
 document.addEventListener('click',e=>{
   if(suppressClick){suppressClick=false;return;}
-  const catH=e.target.closest('.grph[data-cat]');
-  if(catH){ toggleCat(catH.dataset.cat); return; }
-  const clr=e.target.closest('[data-clear]');
-  if(clr){const d=+clr.dataset.clear;ACTS.forEach(a=>{if(state[a.id]===d)state[a.id]=null;});persist();render();return;}
+  const inf=e.target.closest('[data-info]'); if(inf){openInfo(inf.dataset.info);return;}
+  const catH=e.target.closest('.grph[data-cat]'); if(catH){toggleCat(catH.dataset.cat);return;}
+  const clr=e.target.closest('[data-clear]'); if(clr){const d=+clr.dataset.clear;ACTS.forEach(a=>{if(state[a.id]===d)state[a.id]=null;});persist();render();return;}
   const dayEl=e.target.closest('[data-day]');
-  if(selectedId && dayEl){ if(isLocked(dayEl.dataset.day))return; assign(selectedId,dayEl.dataset.day); return; }
+  if(selectedId && dayEl){if(isLocked(dayEl.dataset.day))return;assign(selectedId,dayEl.dataset.day);return;}
 });
 
-// pointer drag (mouse + touch)
+// pointer drag
 let dragId=null,dragEl=null,ghost=null,sx=0,sy=0,dragging=false,lastOver=null;
 function bindChips(){
   document.querySelectorAll('.chip[data-id]').forEach(el=>{
     el.addEventListener('pointerdown',ev=>{
+      if(ev.target.closest('.info'))return;                 // כפתור מידע — לא מתחיל גרירה
       dragId=el.dataset.id;dragEl=el;sx=ev.clientX;sy=ev.clientY;dragging=false;suppressClick=false;
       window.addEventListener('pointermove',onMove);window.addEventListener('pointerup',onUp,{once:true});
     });
   });
 }
-function onMove(ev){
-  if(!dragId)return;
+function onMove(ev){if(!dragId)return;
   if(!dragging&&Math.hypot(ev.clientX-sx,ev.clientY-sy)>7){dragging=true;dragEl.classList.add('dragging');
     ghost=dragEl.cloneNode(true);ghost.id='ghost';ghost.style.width=dragEl.offsetWidth+'px';document.body.appendChild(ghost);}
-  if(dragging){ev.preventDefault();ghost.style.left=ev.clientX+'px';ghost.style.top=ev.clientY+'px';hi(ev.clientX,ev.clientY);}
-}
-function onUp(ev){
-  window.removeEventListener('pointermove',onMove);
-  suppressClick=true;
-  if(dragging){
-    const t=targetAt(ev.clientX,ev.clientY);
-    if(t!==null) assign(dragId,t);
-    if(ghost){ghost.remove();ghost=null;} dragEl&&dragEl.classList.remove('dragging'); clearHi(); dragId=null; dragging=false;
-  } else { selectedId=(selectedId===dragId)?null:dragId; dragId=null; render(); }
-}
+  if(dragging){ev.preventDefault();ghost.style.left=ev.clientX+'px';ghost.style.top=ev.clientY+'px';hi(ev.clientX,ev.clientY);}}
+function onUp(ev){window.removeEventListener('pointermove',onMove);suppressClick=true;
+  if(dragging){const t=targetAt(ev.clientX,ev.clientY);if(t!==null)assign(dragId,t);
+    if(ghost){ghost.remove();ghost=null;}dragEl&&dragEl.classList.remove('dragging');clearHi();dragId=null;dragging=false;}
+  else{selectedId=(selectedId===dragId)?null:dragId;dragId=null;render();}}
 function targetAt(x,y){const el=document.elementFromPoint(x,y);if(!el)return null;const d=el.closest('[data-day]');if(!d)return null;if(isLocked(d.dataset.day))return null;return d.dataset.day;}
 function hi(x,y){const el=document.elementFromPoint(x,y);const d=el&&el.closest('[data-day]');
   if(lastOver&&lastOver!==d)lastOver.classList.remove('over');
   if(d&&d.dataset.day!=='bank'&&!isLocked(d.dataset.day)){d.classList.add('over');lastOver=d;}else lastOver=null;}
 function clearHi(){if(lastOver){lastOver.classList.remove('over');lastOver=null;}}
 
+// info popup
+const infoOv=document.getElementById('info');
+document.getElementById('ifClose').onclick=()=>infoOv.classList.remove('open');
+infoOv.addEventListener('click',e=>{if(e.target===infoOv)infoOv.classList.remove('open');});
+function openInfo(id){
+  const a=BYID[id];if(!a)return;
+  document.querySelector('#info .sheet').style.setProperty('--ac',AC[a.area]);
+  document.getElementById('ifTitle').textContent=`${a.ic} ${a.name}`;
+  document.getElementById('ifChips').innerHTML=`<span class="cchip">${a.area}</span><span class="cchip">${a.cat}</span>`;
+  document.getElementById('ifDesc').textContent=a.d||'';
+  const maps=`https://www.google.com/maps/search/?api=1&query=${a.lat},${a.lng}`;
+  let l=`<a class="pri" href="${maps}" target="_blank" rel="noopener">📍 גוגל מפות</a>`;
+  if(a.site) l+=`<a href="${a.site}" target="_blank" rel="noopener">🌐 אתר</a>`;
+  l+=`<a href="index.html" target="_blank" rel="noopener">🧭 פרטים במדריך</a>`;
+  document.getElementById('ifLnks').innerHTML=l;
+  infoOv.classList.add('open');
+}
+
 document.getElementById('reset').onclick=()=>{if(confirm('לנקות את כל השיבוצים? (אצל כולם)')){state=emptyState();selectedId=null;persist();render();}};
 document.getElementById('loadRec').onclick=()=>{if(confirm('לטעון את שיבוץ ההמלצה? (יחליף את הקיים אצל כולם)')){state=applyAssigned(REC);selectedId=null;persist();render();}};
 
-// ---------- init + סנכרון ----------
 (async function init(){
-  render(); setSync('☁️ טוען…');
+  render();setSync('☁️ טוען…');
   const remote=await fetchRemotePlan();
-  if(remote){ state=applyAssigned(remote); saveLocal(); render(); setSync('☁️ מסונכרן'); }
+  if(remote){state=applyAssigned(remote);saveLocal();render();setSync('☁️ מסונכרן');}
   else setSync(configured?'☁️ מסונכרן':'💾 מקומי');
   if(configured) setInterval(async()=>{
-    if(Date.now()-lastLocalChange<30000) return;      // לא לדרוס עריכה טרייה
-    const r=await fetchRemotePlan(); if(!r) return;
-    if(norm(assignedOnly())!==norm(r)){ state=applyAssigned(r); saveLocal(); render(); setSync('🔄 עודכן מהמשפחה'); }
-  }, 25000);
+    if(Date.now()-lastLocalChange<30000)return;
+    const r=await fetchRemotePlan();if(!r)return;
+    if(norm(assignedOnly())!==norm(r)){state=applyAssigned(r);saveLocal();render();setSync('🔄 עודכן מהמשפחה');}
+  },25000);
 })();
 </script>
 </body>
